@@ -887,7 +887,8 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
 
   void DGUSScreenHandler::ZoffsetConfirm(DGUS_VP_Variable &var, void *val_ptr) {
     
-    gcode.mks_m500();
+    // gcode.process_subcommands_now_P(pstr("m500"));
+    gcode.process_subcommands_now_P(PSTR("M500"));
 
     if(print_job_timer.isRunning())
     {
@@ -926,7 +927,7 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
     uint16_t value = swap16(*(uint16_t *)val_ptr);
     thermalManager.extrude_min_temp = value;
     min_ex_temp = value;
-    gcode.mks_m500();
+    gcode.process_subcommands_now_P(PSTR("M500"));
   }
 
 
@@ -966,8 +967,8 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
         
         gcode.process_subcommands_now_P(PSTR("M500"));
         gcode.process_subcommands_now_P(PSTR("M501"));
-        // gcode.mks_m500();
-        // gcode.mks_m501();
+        // gcode.process_subcommands_now_P(PSTR("m500"));
+        // gcode.process_subcommands_now_P(PSTR("m501"));
         ScreenHandler.GotoScreen(MKSLCD_SCREEN_EEP_Config);
       break;
 
@@ -1056,7 +1057,7 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
         DGUSLanguageSwitch = MKS_SimpleChinese;
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_Choose);
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
-        gcode.mks_m500();
+        gcode.process_subcommands_now_P(PSTR("M500"));
       break;
 
       case MKS_English:
@@ -1064,7 +1065,7 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
         DGUSLanguageSwitch = MKS_English;
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_NoChoose);
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_Choose);
-        gcode.mks_m500();
+        gcode.process_subcommands_now_P(PSTR("M500"));
       break;
       default:
       break;
@@ -1376,70 +1377,70 @@ void DGUSScreenHandler::TMC_ChangeConfig(DGUS_VP_Variable &var, void *val_ptr)
       case VP_TMC_X_STEP:
         #if AXIS_HAS_STEALTHCHOP(X)
           stepperX.homing_threshold(mks_min(tmc_value,255));
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(pstr("M500"));
           // tmc_x_step = stepperX.homing_threshold();
         #endif
       break;
       case VP_TMC_Y_STEP :
         #if AXIS_HAS_STEALTHCHOP(Y)
           stepperY.homing_threshold(mks_min(tmc_value,255));
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(pstr("M500"));
           // tmc_y_step = stepperY.homing_threshold();
         #endif
       break;   
       case VP_TMC_Z_STEP :
         #if AXIS_HAS_STEALTHCHOP(Z)
           stepperZ.homing_threshold(mks_min(tmc_value,255));
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(pstr("M500"));
           // tmc_z_step = stepperZ.homing_threshold();
         #endif
       break;
       case VP_TMC_X_Current:
         #if AXIS_IS_TMC(X)
           stepperX.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(pstr("M500"));
         #endif
       break;
       case VP_TMC_X1_Current:
         #if AXIS_IS_TMC(X2)
           stepperX2.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(pstr("M500"));
         #endif
       break;
       case VP_TMC_Y_Current:
         #if AXIS_IS_TMC(Y)
           stepperY.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
       case VP_TMC_Y1_Current:
           #if AXIS_IS_TMC(X2)
           stepperY2.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
       case VP_TMC_Z_Current:
         #if AXIS_IS_TMC(Z)
           stepperZ.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
       case VP_TMC_Z1_Current:
         #if AXIS_IS_TMC(Z2)
           stepperZ2.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
       case VP_TMC_E0_Current:
         #if AXIS_IS_TMC(E0)
           stepperE0.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
       case VP_TMC_E1_Current:
         #if AXIS_IS_TMC(E1)
           stepperE1.rms_current(tmc_value);
-          gcode.mks_m500();
+          gcode.process_subcommands_now_P(PSTR("M500"));
         #endif
       break;
 
@@ -1504,7 +1505,6 @@ void DGUSScreenHandler::HandleManualMove(DGUS_VP_Variable &var, void *val_ptr) {
 
     case VP_MOTOR_LOCK_UNLOK:
       DEBUG_ECHOLNPGM("Motor Unlock");
-      // gcode.motor_unlock();
       movevalue = 5;
       axiscode = '\0';
       // return ;
@@ -1824,7 +1824,7 @@ void DGUSScreenHandler::HandleChangeLevelPoint_MKS(DGUS_VP_Variable &var, void *
 
   *(int16_t*)var.memadr = value_raw;
 
-  gcode.mks_m500();
+  gcode.process_subcommands_now_P(PSTR("M500"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1846,8 +1846,8 @@ void DGUSScreenHandler::HandleStepPerMMChanged_MKS(DGUS_VP_Variable &var, void *
   DEBUG_ECHOLNPAIR_F("value:", value);
   ExtUI::setAxisSteps_per_mm(value, axis);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisSteps_per_mm(axis));
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1871,8 +1871,8 @@ void DGUSScreenHandler::HandleStepPerMMExtruderChanged_MKS(DGUS_VP_Variable &var
   DEBUG_ECHOLNPAIR_F("value:", value);
   ExtUI::setAxisSteps_per_mm(value,extruder);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisSteps_per_mm(extruder));
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1894,8 +1894,8 @@ void DGUSScreenHandler::HandleMaxSpeedChange_MKS(DGUS_VP_Variable &var, void *va
   // ExtUI::setAxisSteps_per_mm(value,extruder);
   ExtUI::setAxisMaxFeedrate_mm_s(value, axis);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisMaxFeedrate_mm_s(axis)); 
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1920,8 +1920,8 @@ void DGUSScreenHandler::HandleExtruderMaxSpeedChange_MKS(DGUS_VP_Variable &var, 
   // ExtUI::setAxisSteps_per_mm(value,extruder);
   ExtUI::setAxisMaxFeedrate_mm_s(value, extruder);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisMaxFeedrate_mm_s(extruder)); 
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1943,8 +1943,8 @@ void DGUSScreenHandler::HandleMaxAccChange_MKS(DGUS_VP_Variable &var, void *val_
   DEBUG_ECHOLNPAIR_F("value:", value);
   ExtUI::setAxisMaxAcceleration_mm_s2(value,axis);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisMaxAcceleration_mm_s2(axis)); 
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -1959,18 +1959,18 @@ void DGUSScreenHandler::HandleExtruderAccChange_MKS(DGUS_VP_Variable &var, void 
   switch (var.VP) {
     default: return;
     #if HOTENDS >= 1
-      case VP_E0_ACC_MAX_SPEED: extruder = ExtUI::extruder_t::E0; gcode.mks_m501(); break;
+      case VP_E0_ACC_MAX_SPEED: extruder = ExtUI::extruder_t::E0; gcode.process_subcommands_now_P(PSTR("M501")); break;
     #endif
     #if HOTENDS >= 2
     #endif
-      case VP_E1_ACC_MAX_SPEED: extruder = ExtUI::extruder_t::E1; gcode.mks_m501(); break;
+      case VP_E1_ACC_MAX_SPEED: extruder = ExtUI::extruder_t::E1; gcode.process_subcommands_now_P(PSTR("M501")); break;
   }
   DEBUG_ECHOLNPAIR_F("value:", value);
   // ExtUI::setAxisSteps_per_mm(value,extruder);
   ExtUI::setAxisMaxAcceleration_mm_s2(value, extruder);
   DEBUG_ECHOLNPAIR_F("value_set:", ExtUI::getAxisMaxAcceleration_mm_s2(extruder)); 
-  gcode.mks_m500(); 
-  gcode.mks_m501();
+  gcode.process_subcommands_now_P(PSTR("M500")); 
+  gcode.process_subcommands_now_P(PSTR("M501"));
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
 }
@@ -2511,7 +2511,9 @@ void DGUSScreenHandler::GetManualFilamentSpeed(DGUS_VP_Variable &var, void *val_
 
       if (filament_data.action == 1) { // load filament
         if (!filament_data.heated) {
-          // GotoScreen(DGUSLCD_SCREEN_FILAMENT_LOADING);
+          #if !ENABLED(DGUS_LCD_UI_MKS)
+            // GotoScreen(DGUSLCD_SCREEN_FILAMENT_LOADING);
+          #endif
           filament_data.heated = true;
         }
         movevalue = ExtUI::getAxisPosition_mm(filament_data.extruder)+movevalue;

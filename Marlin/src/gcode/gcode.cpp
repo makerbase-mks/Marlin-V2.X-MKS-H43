@@ -203,36 +203,34 @@ void GcodeSuite::dwell(millis_t time) {
   while (PENDING(millis(), time)) idle();
 }
 
-#if ENABLED(DGUS_LCD_UI_MKS)
-/**
- * unlock motor
-*/
-void GcodeSuite::motor_unlock(void) {
-  M18_M84();
-}
-void GcodeSuite::motor_all_back(void)
-{
-  G28();
-}
+// #if ENABLED(DGUS_LCD_UI_MKS)
+// /**
+//  * unlock motor
+// */
+// void GcodeSuite::motor_unlock(void) {
+//   M18_M84();
+// }
+// void GcodeSuite::motor_all_back(void)
+// {
+//   G28();
+// }
 
-void GcodeSuite::mks_m500(void)
-{
-  M500();
-}
+// void GcodeSuite::mks_m500(void)
+// {
+//   M500();
+// }
 
-void GcodeSuite::mks_m501(void)
-{
-  M501();
-}
+// void GcodeSuite::mks_m501(void)
+// {
+//   M501();
+// }
 
-void GcodeSuite::mks_m502(void)
-{
-  M502();
-}
+// void GcodeSuite::mks_m502(void)
+// {
+//   M502();
+// }
 
-
-
-#endif 
+// #endif 
 
 /**
  * When G29_RETRY_AND_RECOVER is enabled, call G29() in
