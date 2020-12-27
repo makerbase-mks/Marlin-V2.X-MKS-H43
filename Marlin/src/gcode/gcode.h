@@ -409,13 +409,13 @@ public:
   #endif
 
   static void dwell(millis_t time);
-  #if ENABLED(DGUS_LCD_UI_MKS)
-    static void motor_unlock();
-    static void motor_all_back();
-    static void mks_m500();
-    static void mks_m501();
-    static void mks_m502();
-  #endif 
+  // #if ENABLED(DGUS_LCD_UI_MKS)
+  //   static void motor_unlock();
+  //   static void motor_all_back();
+  //   static void mks_m500();
+  //   static void mks_m501();
+  //   static void mks_m502();
+  // #endif 
 private:
 
   TERN_(MARLIN_DEV_MODE, static void D(const int16_t dcode));
