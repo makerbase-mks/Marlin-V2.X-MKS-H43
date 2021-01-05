@@ -66,7 +66,10 @@ void DGUSDisplay::InitDisplay() {
   #endif
   LCD_SERIAL.begin(LCD_BAUDRATE);
   if (TERN1(POWER_LOSS_RECOVERY, !recovery.valid())) {
-    RequestScreen(TERN(SHOW_BOOTSCREEN, DGUSLCD_SCREEN_BOOT, DGUSLCD_SCREEN_MAIN));
+    #if ENABLED(DGUS_LCD_UI_MKS)
+      delay(LOGO_TIME_DELAY);
+      RequestScreen(TERN(SHOW_BOOTSCREEN, DGUSLCD_SCREEN_BOOT, DGUSLCD_SCREEN_MAIN));
+    #endif
   }
     
 }
