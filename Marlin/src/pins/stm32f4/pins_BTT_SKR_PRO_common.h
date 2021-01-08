@@ -44,6 +44,9 @@
   #define FLASH_EEPROM_LEVELING
 #endif
 
+// USB Flash Drive support
+#define HAS_OTG_USB_HOST_SUPPORT
+
 //
 // Servos
 //
@@ -300,9 +303,9 @@
   // so force Software SPI to work around this issue.
   #define SOFTWARE_SPI
   #define SDSS                              PA4
-  #define SCK_PIN                           PA5
-  #define MISO_PIN                          PA6
-  #define MOSI_PIN                          PB5
+  #define SD_SCK_PIN                        PA5
+  #define SD_MISO_PIN                       PA6
+  #define SD_MOSI_PIN                       PB5
   #define SD_DETECT_PIN                     PB11
 
 #elif SD_CONNECTION_IS(CUSTOM_CABLE)
@@ -426,6 +429,11 @@
       #define LCD_PINS_D5           EXPA1_05_PIN
       #define LCD_PINS_D6           EXPA1_04_PIN
       #define LCD_PINS_D7           EXPA1_03_PIN
+
+      #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
+        #define BTN_ENC_EN           LCD_PINS_D7  // Detect the presence of the encoder
+      #endif
+
     #endif
 
   #endif

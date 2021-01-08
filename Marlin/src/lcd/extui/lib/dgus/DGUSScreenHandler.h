@@ -37,6 +37,7 @@ public:
   /// Send all 4 strings that are displayed on the infoscreen, confirmation screen and kill screen
   /// The bools specifing whether the strings are in RAM or FLASH.
   static void sendinfoscreen(const char* line1, const char* line2, const char* line3, const char* line4, bool l1inflash, bool l2inflash, bool l3inflash, bool liinflash);
+
   static void HandleUserConfirmationPopUp(uint16_t ConfirmVP, const char* line1, const char* line2, const char* line3, const char* line4, bool l1inflash, bool l2inflash, bool l3inflash, bool liinflash);
 
   #if ENABLED(DGUS_LCD_UI_MKS)
@@ -129,14 +130,10 @@ public:
     // Hook for PID autotune
     static void HandlePIDAutotune(DGUS_VP_Variable &var, void *val_ptr);
   #endif
-  
   #if HAS_BED_PROBE
-  // Hook for "Change probe offset z"
+    // Hook for "Change probe offset z"
     static void HandleProbeOffsetZChanged(DGUS_VP_Variable &var, void *val_ptr);
   #endif
-  
-
-
   #if ENABLED(BABYSTEPPING)
     // Hook for live z adjust action
     static void HandleLiveAdjustZ(DGUS_VP_Variable &var, void *val_ptr);
@@ -262,10 +259,9 @@ public:
   /// Display will get a 4-byte integer scaled to the number of digits:
   /// Tell the display the number of digits and it cheats by displaying a dot between...
   template<unsigned int decimals>
-  static void   DGUSLCD_SendFloatAsLongValueToDisplay(DGUS_VP_Variable &var) {
+  static void DGUSLCD_SendFloatAsLongValueToDisplay(DGUS_VP_Variable &var) {
     if (var.memadr) {
       float f = *(float *)var.memadr;
-      DEBUG_ECHOLNPAIR_F(" send >> ", f, 6);
       f *= cpow(10, decimals);
       dgusdisplay.WriteVariable(var.VP, (long)f);
     }
@@ -278,7 +274,7 @@ public:
   static void DGUSLCD_SendFloatAsIntValueToDisplay(DGUS_VP_Variable &var) {
     if (var.memadr) {
       float f = *(float *)var.memadr;
-      DEBUG_ECHOLNPAIR_F(" send >> ", f, 6);
+      DEBUG_ECHOLNPAIR_F(" >> ", f, 6);
       f *= cpow(10, decimals);
       dgusdisplay.WriteVariable(var.VP, (int16_t)f);
     }

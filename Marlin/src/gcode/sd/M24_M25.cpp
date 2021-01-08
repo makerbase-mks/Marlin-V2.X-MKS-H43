@@ -93,7 +93,9 @@ void GcodeSuite::M24() {
 void GcodeSuite::M25() {
 
   #if ENABLED(PARK_HEAD_ON_PAUSE)
+
     M125();
+
   #else
 
     // Set initial pause flag to prevent more commands from landing in the queue while we try to pause
@@ -121,6 +123,7 @@ void GcodeSuite::M25() {
         host_action_pause();
       #endif
     #endif
+
   #endif
 }
 

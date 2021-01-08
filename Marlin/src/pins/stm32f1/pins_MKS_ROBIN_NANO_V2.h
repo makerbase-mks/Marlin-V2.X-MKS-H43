@@ -37,6 +37,9 @@
 
 #define BOARD_NO_NATIVE_USB
 
+// Avoid conflict with TIMER_SERVO when using the STM32 HAL
+#define TEMP_TIMER 5
+
 //
 // Release PB4 (Y_ENABLE_PIN) from JTAG NRST role
 //
@@ -57,6 +60,11 @@
 // Note: MKS Robin board is using SPI2 interface.
 //
 #define SPI_DEVICE                             2
+
+//
+// Servos
+//
+#define SERVO0_PIN                          PA8   // Enable BLTOUCH
 
 //
 // Limit Switches
@@ -159,7 +167,7 @@
 
   // Reduce baud rate to improve software serial reliability
   #define TMC_BAUD_RATE                    19200
-#endif // TMC2208 || TMC2209
+#endif // HAS_TMC_UART
 
 //
 // Temperature Sensors
@@ -195,7 +203,9 @@
     #define KILL_PIN_STATE                  true  // Enable MKSPWC PIN STATE
   #endif
 
- 
+  #define MT_DET_1_PIN                      PA4   // LVGL UI FILAMENT RUNOUT1 PIN
+  #define MT_DET_2_PIN                      PE6   // LVGL UI FILAMENT RUNOUT2 PIN
+  #define MT_DET_PIN_INVERTING             false  // LVGL UI filament RUNOUT PIN STATE
 
   #define WIFI_IO0_PIN                      PC13  // MKS ESP WIFI IO0 PIN
   #define WIFI_IO1_PIN                      PC7   // MKS ESP WIFI IO1 PIN
@@ -210,10 +220,7 @@
   //#define PS_ON_PIN                       PB2   // PW_OFF
   #define FIL_RUNOUT_PIN                    PA4
   #define FIL_RUNOUT2_PIN                   PE6
-  #define MT_DET_1_PIN                      PA4   // LVGL UI FILAMENT RUNOUT1 PIN
 #endif
-
-#define SERVO0_PIN                          PA8   // Enable BLTOUCH
 
 //#define LED_PIN                           PB2
 
@@ -221,16 +228,13 @@
 // SD Card
 //
 #ifndef SDCARD_CONNECTION
-  #if !ENABLED(SGUS_LCD_UI_MKS)
-    // #define SDCARD_CONNECTION              ONBOARD
-  #endif 
+  #define SDCARD_CONNECTION              ONBOARD
 #endif
 
 #define SDIO_SUPPORT
 #define SDIO_CLOCK                       4500000  // 4.5 MHz
-#define SD_DETECT_PIN                    PD12
-#define ONBOARD_SD_CS_PIN                PC11
-
+#define SD_DETECT_PIN                       PD12
+#define ONBOARD_SD_CS_PIN                   PC11
 
 //
 // LCD / Controller
@@ -322,6 +326,11 @@
       #define LCD_PINS_D5                   PE15
       #define LCD_PINS_D6                   PD11
       #define LCD_PINS_D7                   PD10
+
+      #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
+        #define BTN_ENC_EN           LCD_PINS_D7  // Detect the presence of the encoder
+      #endif
+
     #endif
 
     #ifndef BOARD_ST7920_DELAY_1

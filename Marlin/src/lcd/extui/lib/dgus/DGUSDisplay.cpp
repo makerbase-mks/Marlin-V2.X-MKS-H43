@@ -40,7 +40,6 @@
 #include "../../../../sd/cardreader.h"
 #include "../../../../libs/duration_t.h"
 #include "../../../../module/printcounter.h"
-
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
 #endif
@@ -68,10 +67,9 @@ void DGUSDisplay::InitDisplay() {
   if (TERN1(POWER_LOSS_RECOVERY, !recovery.valid())) {
     #if ENABLED(DGUS_LCD_UI_MKS)
       delay(LOGO_TIME_DELAY);
-      RequestScreen(TERN(SHOW_BOOTSCREEN, DGUSLCD_SCREEN_BOOT, DGUSLCD_SCREEN_MAIN));
     #endif
   }
-    
+    RequestScreen(TERN(SHOW_BOOTSCREEN, DGUSLCD_SCREEN_BOOT, DGUSLCD_SCREEN_MAIN));
 }
 
 void DGUSDisplay::WriteVariable(uint16_t adr, const void* values, uint8_t valueslen, bool isstr) {
@@ -227,6 +225,7 @@ void DGUSDisplay::ProcessRx() {
           rx_datagram_state = DGUS_IDLE;
           break;
         }
+
       // discard anything else
       rx_datagram_state = DGUS_IDLE;
     }

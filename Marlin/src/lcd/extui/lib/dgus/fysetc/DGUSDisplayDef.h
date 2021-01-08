@@ -214,6 +214,7 @@ constexpr uint16_t VP_Feedrate_Percentage = 0x3108; // 2 Byte Integer (0..100)
 constexpr uint16_t VP_XPos = 0x3110;  // 4 Byte Fixed point number; format xxx.yy
 constexpr uint16_t VP_YPos = 0x3112;  // 4 Byte Fixed point number; format xxx.yy
 constexpr uint16_t VP_ZPos = 0x3114;  // 4 Byte Fixed point number; format xxx.yy
+
 constexpr uint16_t VP_EPos = 0x3120;  // 4 Byte Fixed point number; format xxx.yy
 
 constexpr uint16_t VP_PrintProgress_Percentage = 0x3130; // 2 Byte Integer (0..100)
@@ -228,15 +229,15 @@ constexpr uint16_t VP_PrintsTotal = 0x3180;
 constexpr uint16_t VP_PrintsTotal_LEN = 16;
 
 // SDCard File Listing
-constexpr uint16_t VP_SD_FileName_LEN = 32;     // LEN is shared for all entries.
-constexpr uint16_t DGUS_SD_FILESPERSCREEN = 5;  // FIXME move that info to the display and read it from there.
+constexpr uint16_t VP_SD_FileName_LEN = 32; // LEN is shared for all entries.
+constexpr uint16_t DGUS_SD_FILESPERSCREEN = 5; // FIXME move that info to the display and read it from there.
 constexpr uint16_t VP_SD_FileName0 = 0x3200;
 constexpr uint16_t VP_SD_FileName1 = 0x3220;
 constexpr uint16_t VP_SD_FileName2 = 0x3240;
 constexpr uint16_t VP_SD_FileName3 = 0x3260;
 constexpr uint16_t VP_SD_FileName4 = 0x3280;
 
-constexpr uint16_t VP_SD_Print_ProbeOffsetZ = 0x32A0; 
+constexpr uint16_t VP_SD_Print_ProbeOffsetZ = 0x32A0; //
 constexpr uint16_t VP_SD_Print_Filename = 0x32C0;
 
 // Fan status
@@ -257,31 +258,29 @@ constexpr uint16_t VP_BED_STATUS = 0x331C;
 constexpr uint16_t VP_MOVE_OPTION = 0x3400;
 
 // Step per mm
-constexpr uint16_t VP_X_STEP_PER_MM = 0x3600;     // at the moment , 2 byte unsigned int , 0~1638.4
+constexpr uint16_t VP_X_STEP_PER_MM = 0x3600; // at the moment , 2 byte unsigned int , 0~1638.4
 //constexpr uint16_t VP_X2_STEP_PER_MM = 0x3602;
 constexpr uint16_t VP_Y_STEP_PER_MM = 0x3604;
 //constexpr uint16_t VP_Y2_STEP_PER_MM = 0x3606;
 constexpr uint16_t VP_Z_STEP_PER_MM = 0x3608;
 //constexpr uint16_t VP_Z2_STEP_PER_MM = 0x360A;
 constexpr uint16_t VP_E0_STEP_PER_MM = 0x3610;
-constexpr uint16_t VP_E1_STEP_PER_MM = 0x3612;  
+constexpr uint16_t VP_E1_STEP_PER_MM = 0x3612;
 //constexpr uint16_t VP_E2_STEP_PER_MM = 0x3614;
 //constexpr uint16_t VP_E3_STEP_PER_MM = 0x3616;
 //constexpr uint16_t VP_E4_STEP_PER_MM = 0x3618;
 //constexpr uint16_t VP_E5_STEP_PER_MM = 0x361A;
 
 // PIDs
-constexpr uint16_t VP_E0_PID_P =  0x3700; // at the moment , 2 byte unsigned int , 0~1638.4
-constexpr uint16_t VP_E0_PID_I =  0x3702; 
-constexpr uint16_t VP_E0_PID_D =  0x3704; 
-constexpr uint16_t VP_E1_PID_P =  0x3706; // at the moment , 2 byte unsigned int , 0~1638.4
-constexpr uint16_t VP_E1_PID_I =  0x3708; 
-constexpr uint16_t VP_E1_PID_D =  0x370A; 
+constexpr uint16_t VP_E0_PID_P = 0x3700; // at the moment , 2 byte unsigned int , 0~1638.4
+constexpr uint16_t VP_E0_PID_I = 0x3702;
+constexpr uint16_t VP_E0_PID_D = 0x3704;
+constexpr uint16_t VP_E1_PID_P = 0x3706; // at the moment , 2 byte unsigned int , 0~1638.4
+constexpr uint16_t VP_E1_PID_I = 0x3708;
+constexpr uint16_t VP_E1_PID_D = 0x370A;
 constexpr uint16_t VP_BED_PID_P = 0x3710;
 constexpr uint16_t VP_BED_PID_I = 0x3712;
 constexpr uint16_t VP_BED_PID_D = 0x3714;
-
-
 
 // Wating screen status
 constexpr uint16_t VP_WAITING_STATUS = 0x3800;

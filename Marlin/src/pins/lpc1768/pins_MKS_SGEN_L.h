@@ -146,12 +146,6 @@
   #endif
 #endif
 
-#if EITHER(HAS_TFT_LVGL_UI, HAS_DGUS_H43_UI)
-  #define MT_DET_1_PIN                      PA4   // LVGL UI FILAMENT RUNOUT1 PIN
-  #define MT_DET_2_PIN                      PE6   // LVGL UI FILAMENT RUNOUT2 PIN
-  #define MT_DET_PIN_INVERTING             false  // LVGL UI filament RUNOUT PIN STATE
-#endif
-
 #if HAS_TMC_UART
   /**
    * TMC2208/TMC2209 stepper drivers
@@ -195,7 +189,7 @@
 
   // Reduce baud rate to improve software serial reliability
   #define TMC_BAUD_RATE                    19200
-#endif // TMC2208 || TMC2209
+#endif // HAS_TMC_UART
 
 //
 // Temperature Sensors
@@ -274,7 +268,12 @@
     #define LCD_PINS_ENABLE                -1
     #define LCD_PINS_RS                    -1
 
-    #define TFT_BUFFER_SIZE                 2400
+    #ifndef TFT_BUFFER_SIZE
+      #define TFT_BUFFER_SIZE               1200
+    #endif
+    #ifndef TFT_QUEUE_SIZE
+      #define TFT_QUEUE_SIZE                6144
+    #endif
 
     #define BTN_EN1                        P3_25
     #define BTN_EN2                        P3_26
@@ -353,6 +352,11 @@
           #define LCD_PINS_D5              P0_17
           #define LCD_PINS_D6              P1_00
           #define LCD_PINS_D7              P1_22
+
+          #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
+            #define BTN_ENC_EN       LCD_PINS_D7  // Detect the presence of the encoder
+          #endif
+
         #endif
 
       #endif // !FYSETC_MINI_12864
@@ -366,20 +370,21 @@
 #ifndef SDCARD_CONNECTION
   #define SDCARD_CONNECTION              ONBOARD
 #endif
-
-
-
+//#define SUICIDE_PIN P1_23                         // Enable MKSPWC SUICIDE PIN
+//#define SUICIDE_PIN_INVERTING false               // Enable MKSPWC PIN STATE
+//#define KILL_PIN P1_24                            // Enable MKSPWC DET PIN
+//#define KILL_PIN_STATE true                       // Enable MKSPWC PIN STATE
 #define ONBOARD_SD_CS_PIN                  P0_06  // Chip select for "System" SD card
 
 #if SD_CONNECTION_IS(LCD) || SD_CONNECTION_IS(ONBOARD)
   #define SD_DETECT_PIN                    P0_27
-  #define SCK_PIN                          P0_07
-  #define MISO_PIN                         P0_08
-  #define MOSI_PIN                         P0_09
+  #define SD_SCK_PIN                       P0_07
+  #define SD_MISO_PIN                      P0_08
+  #define SD_MOSI_PIN                      P0_09
   #if SD_CONNECTION_IS(ONBOARD)
-    #define SS_PIN             ONBOARD_SD_CS_PIN
+    #define SD_SS_PIN          ONBOARD_SD_CS_PIN
   #else
-    #define SS_PIN                         P0_28
+    #define SD_SS_PIN                      P0_28
   #endif
 #elif SD_CONNECTION_IS(CUSTOM_CABLE)
   #error "No custom SD drive cable defined for this board."

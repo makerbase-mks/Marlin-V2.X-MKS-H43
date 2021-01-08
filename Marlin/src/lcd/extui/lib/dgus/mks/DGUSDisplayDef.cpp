@@ -39,7 +39,7 @@
 
 #if ENABLED(HAS_STEALTHCHOP)
     #include "../../../../src/module/stepper/trinamic.h"
-#endif 
+#endif
 
 #if ENABLED(DGUS_UI_MOVE_DIS_OPTION)
 uint16_t distanceToMove = 10;
@@ -48,7 +48,7 @@ uint16_t distanceToMove = 10;
 #if ENABLED(DGUS_LCD_UI_MKS)
     uint16_t distanceMove = 1;
     float distanceFilament = 10;
-    uint16_t FilamentSpeed = 25;
+    uint16_t FilamentSpeed = 15;
     float ZOffset_distance = 0.1;
     float mesh_adj_distance = 0.1;
     float Z_distance = 0.1;
@@ -1053,7 +1053,7 @@ const uint16_t MKSOffset_Config[] PROGMEM = {
     #if (EXTRUDERS >= 8)
         VP_T_E7_Is, VP_T_E7_Set,
     #endif
-    
+
     VP_OFFSET_X,
     VP_OFFSET_Y,
     VP_OFFSET_Z,
@@ -1114,7 +1114,7 @@ const struct VPMapping VPMap[] PROGMEM = {
     {MKSLCD_SCREEN_EXTRUDE_P1, MKSList_EXTRUE},                 // Page 4
     {MKSLCD_SCREEN_EXTRUDE_P2, MKSList_EXTRUE},                 // Page 11
     {MKSLCD_PAUSE_SETTING_EX, MKSList_EXTRUE},                  // Page 57
-    {MKSLCD_PAUSE_SETTING_EX2, MKSList_EXTRUE},                 // Page 61 
+    {MKSLCD_PAUSE_SETTING_EX2, MKSList_EXTRUE},                 // Page 61
     {MKSLCD_SCREEN_LEVEL, MKSList_LEVEL},                       // Page 5
     {MKSLCD_SCREEN_MOVE, MKSList_MOVE},                         // Page 6
     {MKSLCD_SCREEN_PRINT, MKSList_Print},                       // Page 7
@@ -1369,7 +1369,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
             VPHELPER(VP_TMC_Z_STEP, &tmc_z_step, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendTMCStepValue),
         #endif
     #endif
-    
+
     #if HAS_TRINAMIC_CONFIG   // TMC Current Setting
         #if AXIS_IS_TMC(X)
             VPHELPER(VP_TMC_X_Current, &stepperX.val_mA, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
@@ -1378,7 +1378,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
         #if AXIS_IS_TMC(Y)
             VPHELPER(VP_TMC_Y_Current, &stepperY.val_mA, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
         #endif
-        
+
         #if AXIS_IS_TMC(Z)
             VPHELPER(VP_TMC_Z_Current, &stepperZ.val_mA, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
         #endif
@@ -1390,7 +1390,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
         #if AXIS_IS_TMC(E1)
             VPHELPER(VP_TMC_E1_Current, &stepperE1.val_mA, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
         #endif
-        
+
         #if AXIS_IS_TMC(X2)
             VPHELPER(VP_TMC_X1_Current, &stepperX2.val_mA, ScreenHandler.TMC_ChangeConfig, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
         #endif
@@ -1418,7 +1418,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
     VPHELPER(VP_MESH_LEVEL_POINT_DIS,&current_position.z,nullptr,ScreenHandler.DGUSLCD_SendFloatByStringToDisplay),
     VPHELPER(VP_Min_EX_T_E, &thermalManager.extrude_min_temp, &ScreenHandler.GetMinExtrudeTemp, &ScreenHandler.DGUSLCD_SendWordValueToDisplay),
     VPHELPER(VP_AutoTurnOffSw, nullptr, &ScreenHandler.GetTurnOffCtrl, nullptr),
-        
+
     #if HOTENDS >= 1
         VPHELPER(VP_E0_STEP_PER_MM, &planner.settings.axis_steps_per_mm[E_AXIS_N(0)], ScreenHandler.HandleStepPerMMExtruderChanged_MKS, ScreenHandler.DGUSLCD_SendFloatAsIntValueToDisplay<0>),
     #endif
