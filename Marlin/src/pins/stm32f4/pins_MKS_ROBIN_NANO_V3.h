@@ -175,20 +175,20 @@
 //
 // Misc. Functions
 //
-#define MT_DET_1                            PA4
-#define MT_DET_2                            PE6
+//#define MT_DET_1                            PA4
+//#define MT_DET_2                            PE6
 #define PW_DET                              PA13
 #define PW_OFF                              PB2
 
-#ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                MT_DET_1
-#endif
-#ifndef FIL_RUNOUT2_PIN
-  #define FIL_RUNOUT2_PIN               MT_DET_2
-#endif
+//#ifndef FIL_RUNOUT_PIN
+  //#define FIL_RUNOUT_PIN                MT_DET_1
+//#endif
+//ifndef FIL_RUNOUT2_PIN
+  //#define FIL_RUNOUT2_PIN               MT_DET_2
+//#endif
 
-#define POWER_LOSS_PIN                    PW_DET
-#define PS_ON_PIN                         PW_OFF
+//#define POWER_LOSS_PIN                    PW_DET
+//#define PS_ON_PIN                         PW_OFF
 
 //
 // Enable MKSPWC support

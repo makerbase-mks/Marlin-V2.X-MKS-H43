@@ -368,9 +368,9 @@
 #endif // HAS_WIRED_LCD
 
 #ifndef SDCARD_CONNECTION
-  #define SDCARD_CONNECTION              ONBOARD
+ #define SDCARD_CONNECTION              ONBOARD
 #endif
-//#define SUICIDE_PIN P1_23                         // Enable MKSPWC SUICIDE PIN
+//#define SUICIDE_PIN P2_00                         // Enable MKSPWC SUICIDE PIN
 //#define SUICIDE_PIN_INVERTING false               // Enable MKSPWC PIN STATE
 //#define KILL_PIN P1_24                            // Enable MKSPWC DET PIN
 //#define KILL_PIN_STATE true                       // Enable MKSPWC PIN STATE

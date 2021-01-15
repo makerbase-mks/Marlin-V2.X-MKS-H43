@@ -38,7 +38,8 @@
 #include "../../../../marlinui.h"
 
 #if ENABLED(HAS_STEALTHCHOP)
-    #include "../../../../src/module/stepper/trinamic.h"
+    // #include "../../../../src/module/stepper/trinamic.h"
+    #include "../../../../../module/stepper/trinamic.h"
 #endif
 
 #if ENABLED(DGUS_UI_MOVE_DIS_OPTION)
@@ -56,14 +57,15 @@ uint16_t distanceToMove = 10;
     int16_t level_1_x_point = 20;
     int16_t level_1_y_point = 20;
 
-    int16_t level_2_x_point = 20;
+    int16_t level_2_x_point = 180;
     int16_t level_2_y_point = 20;
 
-    int16_t level_3_x_point = 20;
-    int16_t level_3_y_point = 20;
+    int16_t level_3_x_point = 180;
+    int16_t level_3_y_point = 180;
 
     int16_t level_4_x_point = 20;
-    int16_t level_4_y_point = 20;
+    int16_t level_4_y_point = 180;
+
     int16_t level_5_x_point = X_MAX_POS / 2;
     int16_t level_5_y_point = Y_MAX_POS / 2;
 
