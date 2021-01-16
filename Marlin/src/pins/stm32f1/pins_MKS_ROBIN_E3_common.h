@@ -49,7 +49,7 @@
 //
 // Servos
 //
-#define SERVO0_PIN                          PA3
+//#define SERVO0_PIN                          PA3
 
 //
 // Limit Switches
@@ -57,7 +57,7 @@
 #define X_STOP_PIN                          PA12
 #define Y_STOP_PIN                          PA11
 #define Z_MIN_PIN                           PC6
-#define Z_MAX_PIN                           PB1
+//#define Z_MAX_PIN                           PB1
 
 //
 // Steppers
@@ -126,7 +126,7 @@
 #define TEMP_BED_PIN                        PA1   // TB
 #define TEMP_0_PIN                          PA0   // TH1
 
-#define FIL_RUNOUT_PIN                      PB10  // MT_DET
+//#define FIL_RUNOUT_PIN                      PB10  // MT_DET
 
 /**
  *                _____                                      _____                                     _____
@@ -184,6 +184,11 @@
 #define SD_MISO_PIN                         PB14
 #define SD_MOSI_PIN                         PB15
 #define SD_SS_PIN                           PA15
+
+//#define SUICIDE_PIN PB10           // Enable MKSPWC SUICIDE PIN
+//#define SUICIDE_PIN_INVERTING false // Enable MKSPWC PIN STATE
+//#define KILL_PIN PB1              // Enable MKSPWC DET PIN
+//#define KILL_PIN_STATE true         // Enable MKSPWC PIN STATE
 
 #ifndef BOARD_ST7920_DELAY_1
   #define BOARD_ST7920_DELAY_1     DELAY_NS(125)

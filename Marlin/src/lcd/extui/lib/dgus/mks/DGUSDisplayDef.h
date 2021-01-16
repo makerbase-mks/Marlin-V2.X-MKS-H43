@@ -19,24 +19,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-#pragma once 
+#pragma once
 
 #include "../DGUSDisplayDef.h"
 
 #define LOGO_TIME_DELAY       1500
 
-// #define DGUS_MKS_RUNOUT_SENSOR
+ //#define DGUS_MKS_RUNOUT_SENSOR
 #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
-  #define MT_DET_1_PIN                      1   
-  #define MT_DET_2_PIN                      2   
-  #define MT_DET_PIN_INVERTING             false  
+ #define MT_DET_1_PIN P1_26
+//#define MT_DET_2_PIN 2
+    #define MT_DET_PIN_INVERTING false
 #endif
 
 #define MKS_FINSH
 enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_BOOT                 =   120,
   DGUSLCD_SCREEN_MAIN                 =   1,
-  
+
   DGUSLCD_SCREEN_STATUS               =   1,
   DGUSLCD_SCREEN_STATUS2              =   1,
   DGUSLCD_SCREEN_PREHEAT              =  18,
@@ -49,12 +49,12 @@ enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_SDPRINTTUNE          =  17,
 
 
-  MKSLCD_SCREEN_BOOT                  = 0, 
+  MKSLCD_SCREEN_BOOT                  = 0,
   MKSLCD_SCREEN_HOME                  = 1,   // MKS main page
   MKSLCD_SCREEN_SETTING               = 2,   // MKS Setting page / no wifi whit
   MKSLCD_SCREEM_TOOL                  = 3,   // MKS Tool page
-  MKSLCD_SCREEN_EXTRUDE_P1            = 4, 
-  MKSLCD_SCREEN_EXTRUDE_P2            = 11, 
+  MKSLCD_SCREEN_EXTRUDE_P1            = 4,
+  MKSLCD_SCREEN_EXTRUDE_P2            = 11,
   MKSLCD_SCREEN_LEVEL                 = 5,
   MKSLCD_AUTO_LEVEL                   = 73,
   MKSLCD_SCREEN_LEVEL_PRESS           = 9,
@@ -88,7 +88,7 @@ enum DGUSLCD_Screens : uint8_t {
   MKSLCD_Screen_Offset_Config         = 30,
   MKSLCD_Screen_PMove                 = 64,
   MKSLCD_Screen_Baby                  = 71,
-  
+
   DGUSLCD_SCREEN_CONFIRM              = 240,
   DGUSLCD_SCREEN_KILL                 = 250, ///< Kill Screen. Must always be 250 (to be able to display "Error wrong LCD Version")
   DGUSLCD_SCREEN_WAITING              = 251,
@@ -133,7 +133,7 @@ enum DGUSLCD_Screens : uint8_t {
 // constexpr uint16_t VP_TEMP_ALL_OFF = 0x2002;   // Turn all heaters off. Value arbitrary ;)=
 // constexpr uint16_t VP_SCREENCHANGE_WHENSD = 0x2003; // "Print" Button touched -- go only there if there is an SD Card.
 // constexpr uint16_t VP_CONFIRMED = 0x2010; // OK on confirm screen.
- 
+
 // // Buttons on the SD-Card File listing.
 // constexpr uint16_t VP_SD_ScrollEvent = 0x2020; // Data: 0 for "up a directory", numbers are the amount to scroll, e.g -1 one up, 1 one down
 // constexpr uint16_t VP_SD_FileSelected = 0x2022; // Number of file field selected.
@@ -206,7 +206,7 @@ enum DGUSLCD_Screens : uint8_t {
 // constexpr uint16_t VP_Z_CALIBRATE = 0x2430;
 
 // First layer cal
-// constexpr uint16_t VP_Z_FIRST_LAYER_CAL = 0x2500; // Data: 0 - Cancel first layer cal progress, >0 filament type have loaded 
+// constexpr uint16_t VP_Z_FIRST_LAYER_CAL = 0x2500; // Data: 0 - Cancel first layer cal progress, >0 filament type have loaded
 
 // Firmware version on the boot screen.
 // constexpr uint16_t VP_MARLIN_VERSION = 0x3000;
@@ -289,7 +289,7 @@ constexpr uint8_t VP_M117_LEN = 0x20;
 
 // Heater status
 constexpr uint16_t VP_E0_STATUS = 0x3410;
-constexpr uint16_t VP_E1_STATUS = 0x3412; 
+constexpr uint16_t VP_E1_STATUS = 0x3412;
 //constexpr uint16_t VP_E2_STATUS = 0x3414;
 //constexpr uint16_t VP_E3_STATUS = 0x3416;
 //constexpr uint16_t VP_E4_STATUS = 0x3418;
@@ -320,13 +320,13 @@ constexpr uint16_t SP_T_E1_Is     = 0x5020;
 constexpr uint16_t SP_T_Bed_Is    = 0x5030;
 constexpr uint16_t SP_T_Bed_Set   = 0x5040;
 
-/************************************************************************************************************************* 
- ************************************************************************************************************************* 
- *                                                 DGUS for MKS Mem layout 
+/*************************************************************************************************************************
+ *************************************************************************************************************************
+ *                                                 DGUS for MKS Mem layout
  ************************************************************************************************************************
  ************************************************************************************************************************/
 
-#if ENABLED(MKS_FINSH) 
+#if ENABLED(MKS_FINSH)
 /* -------------------------------0x1000-0x1FFF------------------------------- */
 constexpr uint16_t VP_MSGSTR1                       = 0x1100;
 constexpr uint8_t  VP_MSGSTR1_LEN                   = 0x20;  // might be more place for it...
@@ -373,13 +373,13 @@ constexpr uint16_t VP_T_E7_Set                      = 0x203B;   // 2 Byte Intege
 constexpr uint16_t VP_T_Bed_Is                      = 0x2040;   // 4 Byte Integer
 constexpr uint16_t VP_T_Bed_Set                     = 0x2044;   // 2 Byte Integer
 
-constexpr uint16_t VP_Min_EX_T_E                    = 0X2100;      
+constexpr uint16_t VP_Min_EX_T_E                    = 0X2100;
 
 
 
 
 constexpr uint16_t VP_Flowrate_E0                   = 0x2200;   // 2 Byte Integer
-constexpr uint16_t VP_Flowrate_E1                   = 0x2202;   // 2 Byte Integer 
+constexpr uint16_t VP_Flowrate_E1                   = 0x2202;   // 2 Byte Integer
 constexpr uint16_t VP_Flowrate_E2                   = 0x2204;
 constexpr uint16_t VP_Flowrate_E3                   = 0x2206;
 constexpr uint16_t VP_Flowrate_E4                   = 0x2208;
@@ -442,7 +442,7 @@ constexpr uint16_t VP_LOAD_Filament                 = 0x2508;
 constexpr uint16_t VP_UNLOAD_Filament               = 0x250B;
 constexpr uint16_t VP_Filament_distance             = 0x2600;
 constexpr uint16_t VP_Filament_speed                = 0x2604;
-constexpr uint16_t VP_MIN_EX_T                      = 0X2606;    
+constexpr uint16_t VP_MIN_EX_T                      = 0X2606;
 
 constexpr uint16_t VP_E1_Filament_distance          = 0x2614;
 constexpr uint16_t VP_E1_Filament_speed             = 0x2616;
@@ -474,8 +474,8 @@ constexpr uint16_t VP_E3_STEP_PER_MM                = 0x2916;
 constexpr uint16_t VP_E4_STEP_PER_MM                = 0x2918;
 constexpr uint16_t VP_E5_STEP_PER_MM                = 0x291A;
 constexpr uint16_t VP_E6_STEP_PER_MM                = 0x291C;
-constexpr uint16_t VP_E7_STEP_PER_MM                = 0x291E; 
- 
+constexpr uint16_t VP_E7_STEP_PER_MM                = 0x291E;
+
 constexpr uint16_t VP_X_MAX_SPEED                   = 0x2A00;
 constexpr uint16_t VP_Y_MAX_SPEED                   = 0x2A04;
 constexpr uint16_t VP_Z_MAX_SPEED                   = 0x2A08;
@@ -520,8 +520,8 @@ constexpr uint16_t VP_SD_FileName7                  = 0x31E0;
 constexpr uint16_t VP_SD_FileName8                  = 0x3200;
 constexpr uint16_t VP_SD_FileName9                  = 0x3220;
 
-constexpr uint16_t VP_SD_Print_ProbeOffsetZ         = 0x32A0; 
-constexpr uint16_t VP_SD_Print_Baby                 = 0x32B0; 
+constexpr uint16_t VP_SD_Print_ProbeOffsetZ         = 0x32A0;
+constexpr uint16_t VP_SD_Print_Baby                 = 0x32B0;
 constexpr uint16_t VP_SD_Print_Filename             = 0x32C0;
 
 // X Y Z Point
@@ -581,11 +581,11 @@ constexpr uint16_t VP_BED_PID_P = 0x3710;
 constexpr uint16_t VP_BED_PID_I = 0x3712;
 constexpr uint16_t VP_BED_PID_D = 0x3714;
 
-constexpr uint16_t VP_EEPROM_CTRL = 0X3720; 
+constexpr uint16_t VP_EEPROM_CTRL = 0X3720;
 
-constexpr uint16_t VP_OFFSET_X = 0X3724; 
-constexpr uint16_t VP_OFFSET_Y = 0X3728; 
-constexpr uint16_t VP_OFFSET_Z = 0X372B; 
+constexpr uint16_t VP_OFFSET_X = 0X3724;
+constexpr uint16_t VP_OFFSET_Y = 0X3728;
+constexpr uint16_t VP_OFFSET_Z = 0X372B;
 
 // PID autotune
 constexpr uint16_t VP_PID_AUTOTUNE_E0 = 0x3800;
@@ -633,17 +633,17 @@ constexpr uint16_t VP_E1_BED_PREHEAT = 0x4022;
 // Settings store , reset
 
 
-// Level data 
-constexpr uint16_t VP_Level_Point_One_X              = 0x4100;   
-constexpr uint16_t VP_Level_Point_One_Y              = 0x4102;   
-constexpr uint16_t VP_Level_Point_Two_X              = 0x4104;   
-constexpr uint16_t VP_Level_Point_Two_Y              = 0x4106;   
-constexpr uint16_t VP_Level_Point_Three_X            = 0x4108;   
-constexpr uint16_t VP_Level_Point_Three_Y            = 0x410A;   
-constexpr uint16_t VP_Level_Point_Four_X             = 0x410C;   
-constexpr uint16_t VP_Level_Point_Four_Y             = 0x410E;   
-constexpr uint16_t VP_Level_Point_Five_X             = 0x4110;   
-constexpr uint16_t VP_Level_Point_Five_Y             = 0x4112;   
+// Level data
+constexpr uint16_t VP_Level_Point_One_X              = 0x4100;
+constexpr uint16_t VP_Level_Point_One_Y              = 0x4102;
+constexpr uint16_t VP_Level_Point_Two_X              = 0x4104;
+constexpr uint16_t VP_Level_Point_Two_Y              = 0x4106;
+constexpr uint16_t VP_Level_Point_Three_X            = 0x4108;
+constexpr uint16_t VP_Level_Point_Three_Y            = 0x410A;
+constexpr uint16_t VP_Level_Point_Four_X             = 0x410C;
+constexpr uint16_t VP_Level_Point_Four_Y             = 0x410E;
+constexpr uint16_t VP_Level_Point_Five_X             = 0x4110;
+constexpr uint16_t VP_Level_Point_Five_Y             = 0x4112;
 
 
 /* H43 Version */
@@ -763,10 +763,10 @@ constexpr uint16_t VP_LevelConfig_Dis               = 0x5110;
 constexpr uint16_t VP_Advance_Dis                   = 0x5130;
 constexpr uint16_t VP_TemperatureConfig_Dis         = 0x5390;
 
-#endif 
+#endif
 
 
- 
+
 
 
 
