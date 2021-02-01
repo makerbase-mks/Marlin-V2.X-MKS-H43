@@ -23,8 +23,13 @@
 
 #include "../DGUSDisplayDef.h"
 
-#define LOGO_TIME_DELAY       1500
+#define USE_MKS_GREEN_UI      
 
+#if ENABLED(USE_MKS_GREEN_UI)
+#define LOGO_TIME_DELAY       5000
+#else
+#define LOGO_TIME_DELAY       1500
+#endif
  //#define DGUS_MKS_RUNOUT_SENSOR
 #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
  #define MT_DET_1_PIN P1_26
@@ -33,6 +38,8 @@
 #endif
 
 #define MKS_FINSH
+
+#if DISABLED(USE_MKS_GREEN_UI )
 enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_BOOT                 =   120,
   DGUSLCD_SCREEN_MAIN                 =   1,
@@ -95,7 +102,69 @@ enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_POPUP                = 252, ///< special target, popup screen will also return this code to say "return to previous screen"
   DGUSLDC_SCREEN_UNUSED               = 255,
 };
+#else 
+enum DGUSLCD_Screens : uint8_t {
+  DGUSLCD_SCREEN_BOOT                 =   120,
+  DGUSLCD_SCREEN_MAIN                 =   1,
 
+  DGUSLCD_SCREEN_STATUS               =   1,
+  DGUSLCD_SCREEN_STATUS2              =   1,
+  DGUSLCD_SCREEN_PREHEAT              =  18,
+  DGUSLCD_SCREEN_POWER_LOSS           = 100,
+  DGUSLCD_SCREEN_MANUALMOVE           = 192,
+  DGUSLCD_SCREEN_UTILITY              = 120,
+  DGUSLCD_SCREEN_FILAMENT_UNLOADING   = 158,
+  DGUSLCD_SCREEN_SDFILELIST           =  15,
+  DGUSLCD_SCREEN_SDPRINTMANIPULATION  =  15,
+  DGUSLCD_SCREEN_SDPRINTTUNE          =  17,
+
+  MKSLCD_SCREEN_BOOT                  = 0,
+  MKSLCD_SCREEN_HOME                  = 1,   // MKS main page
+  MKSLCD_SCREEN_SETTING               = 2,   // MKS Setting page / no wifi whit
+  MKSLCD_SCREEM_TOOL                  = 3,   // MKS Tool page
+  MKSLCD_SCREEN_EXTRUDE_P1            = 4,
+  MKSLCD_SCREEN_EXTRUDE_P2            = 11,
+  MKSLCD_SCREEN_LEVEL                 = 5,
+  MKSLCD_AUTO_LEVEL                   = 73,
+  MKSLCD_SCREEN_LEVEL_PRESS           = 9,
+  MKSLCD_SCREEN_MOVE                  = 6,
+  MKSLCD_SCREEN_PRINT                 = 7,
+  MKSLCD_SCREEN_PRINT_PRESS           = 13,
+  MKSLCD_SCREEN_PAUSE                 = 26,
+  MKSLCD_SCREEN_PAUSE_PRESS           = 26,
+  MKSLCD_SCREEN_CHOOSE_FILE           = 15,
+  MKSLCD_SCREEN_NO_CHOOSE_FILE        = 17,
+  MKSLCD_SCREEN_Config                = 46,
+  MKSLCD_SCREEN_Config_MOTOR          = 47,
+  MKSLCD_SCREEN_MOTOR_PLUSE           = 51,
+  MKSLCD_SCREEN_MOTOR_SPEED           = 55,
+  MKSLCD_SCREEN_MOTOR_ACC_MAX         = 53,
+  MKSLCD_SCREEN_PRINT_CONFIG          = 60,
+  MKSLCD_SCREEN_LEVEL_DATA            = 48,
+  MKSLCD_PrintPause_SET               = 49,
+  MKSLCD_FILAMENT_DATA                = 50,
+  MKSLCD_ABOUT                        = 36,
+  MKSLCD_PID                          = 56,
+  MKSLCD_PAUSE_SETTING_MOVE           = 58,
+  MKSLCD_PAUSE_SETTING_EX             = 57,
+  MKSLCD_PAUSE_SETTING_EX2            = 61,
+  MKSLCD_SCREEN_NO_FILE               = 42,
+  MKSLCD_SCREEN_PRINT_CONFIRM         = 43,
+  MKSLCD_SCREEN_EX_CONFIG             = 65,
+  MKSLCD_SCREEN_EEP_Config            = 20,
+  MKSLCD_SCREEN_PrintDone             = 25,
+  MKSLCD_SCREEN_TMC_Config            = 70,
+  MKSLCD_Screen_Offset_Config         = 30,
+  MKSLCD_Screen_PMove                 = 64,
+  MKSLCD_Screen_Baby                  = 71,
+
+  DGUSLCD_SCREEN_CONFIRM              = 240,
+  DGUSLCD_SCREEN_KILL                 = 250, ///< Kill Screen. Must always be 250 (to be able to display "Error wrong LCD Version")
+  DGUSLCD_SCREEN_WAITING              = 251,
+  DGUSLCD_SCREEN_POPUP                = 252, ///< special target, popup screen will also return this code to say "return to previous screen"
+  DGUSLDC_SCREEN_UNUSED               = 255,
+};
+#endif
 // Display Memory layout used (T5UID)
 // Except system variables this is arbitrary, just to organize stuff....
 

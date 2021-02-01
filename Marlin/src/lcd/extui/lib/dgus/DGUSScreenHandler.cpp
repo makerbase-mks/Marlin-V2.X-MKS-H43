@@ -44,8 +44,6 @@
   #include "../../../../../src/libs/nozzle.h"
   #include "../../../../module/settings.h"
   #if ENABLED(HAS_STEALTHCHOP)
-    // #include "../../../../src/module/stepper/trinamic.h"
-    // #include "../../../../src/module/stepper/indirection.h"
     #include "../../../../module/stepper/trinamic.h"
     #include "../../../../module/stepper/indirection.h"
   #endif
@@ -2357,9 +2355,6 @@ void DGUSScreenHandler::GetManualFilamentSpeed(DGUS_VP_Variable &var, void *val_
             ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POPUP);
           }
           else {
-            // sprintf_P(buf,PSTR("T0\nG91\nG1 E%d F%d\nG90"),(int)distanceFilament,FilamentSpeed * 60);
-            // gcode.process_subcommands_now_P(buf);
-            // queue.enqueue_one_now(buf);
             queue.enqueue_now_P(PSTR("T0"));
             queue.enqueue_now_P(PSTR("G91"));
             snprintf_P(buf,40,PSTR("G1 E%d F%d"),(int)distanceFilament,FilamentSpeed * 60);
@@ -2713,58 +2708,59 @@ bool DGUSScreenHandler::loop() {
 
   #if ENABLED(SHOW_BOOTSCREEN)
     static bool booted = false;
-
-  #if !ENABLED(DGUS_LCD_UI_MKS)
-    if (!booted && TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
-      booted = true;
-    #endif
-
-    if (!booted && ELAPSED(ms, BOOTSCREEN_TIMEOUT)) {
-      booted = true;
-
-      #if ENABLED(DGUS_LCD_UI_MKS)
-        #if USE_SENSORLESS
-          #if AXIS_HAS_STEALTHCHOP(X)
-            tmc_x_step = stepperX.homing_threshold();
-          #endif
-          #if AXIS_HAS_STEALTHCHOP(Y)
-            tmc_y_step = stepperY.homing_threshold();
-          #endif
-          #if AXIS_HAS_STEALTHCHOP(Z)
-            tmc_z_step = stepperZ.homing_threshold();
-          #endif
-        #endif
-      if (min_ex_temp != 0)
-      {
-        thermalManager.extrude_min_temp = min_ex_temp;
-      }
-
-      DGUS_ExturdeLoadInit();
-
-#if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
-      DGUS_RunoutInit();
-#endif
-
-      if (TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
-      {
-        ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
-      }
-      else
-      {
-        GotoScreen(DGUSLCD_SCREEN_MAIN);
-      }
+      #if !ENABLED(DGUS_LCD_UI_MKS)
+        if (!booted && TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
+          booted = true;
       #endif
-    }
 
-    #if ENABLED(DGUS_LCD_UI_MKS)
-      if(booted) {
-        if(IS_SD_PRINTING() || IS_SD_PAUSED()) {
-          #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
-            DGUS_Runout_Idle();
+      #if DISABLED(USE_MKS_GREEN_UI)
+      if (!booted && ELAPSED(ms, BOOTSCREEN_TIMEOUT)) {
+      #else 
+      if (!booted && ELAPSED(ms, 1000)) {
+      #endif
+        booted = true;
+        #if ENABLED(DGUS_LCD_UI_MKS)
+          #if USE_SENSORLESS
+            #if AXIS_HAS_STEALTHCHOP(X)
+              tmc_x_step = stepperX.homing_threshold();
+            #endif
+            #if AXIS_HAS_STEALTHCHOP(Y)
+              tmc_y_step = stepperY.homing_threshold();
+            #endif
+            #if AXIS_HAS_STEALTHCHOP(Z)
+              tmc_z_step = stepperZ.homing_threshold();
+            #endif
           #endif
+        if (min_ex_temp != 0)
+        {
+          thermalManager.extrude_min_temp = min_ex_temp;
         }
+
+        DGUS_ExturdeLoadInit();
+
+        #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
+              DGUS_RunoutInit();
+        #endif
+
+        if (TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
+        {
+          ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
+        }
+        else
+        {
+          GotoScreen(DGUSLCD_SCREEN_MAIN);
+        }
+        #endif
       }
-    #endif
+        #if ENABLED(DGUS_LCD_UI_MKS)
+          if(booted) {
+            if(IS_SD_PRINTING() || IS_SD_PAUSED()) {
+              #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
+                DGUS_Runout_Idle();
+              #endif
+            }
+          }
+        #endif
   #endif
   return IsScreenComplete();
 }
