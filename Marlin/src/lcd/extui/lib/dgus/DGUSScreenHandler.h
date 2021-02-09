@@ -92,7 +92,7 @@ public:
   static void DGUS_Runout_Idle(void);
   static void DGUS_RunoutInit(void);
   static void DGUS_ExturdeLoadInit(void);
-  
+  static void LCD_BLK_Adjust(DGUS_VP_Variable &var, void *val_ptr);
   #endif
 
   // Hook for manual move.
@@ -214,17 +214,15 @@ public:
   static void DGUSLCD_SendPrintProgressToDisplay(DGUS_VP_Variable &var);
   static void DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var);
 
-
   #if ENABLED(DGUS_LCD_UI_MKS)
-  static void DGUSLCD_SendPrintTimeToDisplay_MKS(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendBabyStepToDisplay_MKS(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendFloatByStringToDisplay(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendFanToDisplay(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendGbkToDisplay(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendStringToDisplay_Ch_MKS(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendStringToDisplay_Language_MKS(DGUS_VP_Variable &var);
-  static void DGUSLCD_SendTMCStepValue(DGUS_VP_Variable &var);
-  
+    static void DGUSLCD_SendPrintTimeToDisplay_MKS(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendBabyStepToDisplay_MKS(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendFloatByStringToDisplay(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendFanToDisplay(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendGbkToDisplay(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendStringToDisplay_Ch_MKS(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendStringToDisplay_Language_MKS(DGUS_VP_Variable &var);
+    static void DGUSLCD_SendTMCStepValue(DGUS_VP_Variable &var);
   #endif
 
   #if ENABLED(PRINTCOUNTER)
