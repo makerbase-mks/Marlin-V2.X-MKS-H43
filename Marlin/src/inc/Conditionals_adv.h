@@ -142,6 +142,10 @@
   #undef SD_FINISHED_RELEASECOMMAND
 #endif
 
+#if ENABLED(NO_SD_AUTOSTART)
+  #undef MENU_ADDAUTOSTART
+#endif
+
 #if EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY)
   #define HAS_PRINT_PROGRESS 1
 #endif
@@ -376,6 +380,14 @@
 // Poll-based jogging for joystick and other devices
 #if ENABLED(JOYSTICK)
   #define POLL_JOG
+#endif
+
+#ifndef HOMING_BUMP_MM
+  #define HOMING_BUMP_MM { 0, 0, 0 }
+#endif
+
+#if ENABLED(USB_FLASH_DRIVE_SUPPORT) && NONE(USE_OTG_USB_HOST, USE_UHS3_USB)
+  #define USE_UHS2_USB
 #endif
 
 /**

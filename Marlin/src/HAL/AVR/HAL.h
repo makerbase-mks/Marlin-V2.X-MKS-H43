@@ -105,11 +105,6 @@ typedef int8_t pin_t;
   #if HAS_DGUS_LCD
     #define SERIAL_GET_TX_BUFFER_FREE() LCD_SERIAL.get_tx_buffer_free()
   #endif
-
-  // #if HAS_DGUS_LCD
-  //   #define SERIAL_GET_TX_BUFFER_FREE() LCD_SERIAL.availableForWrite() 
-  // #endif
-
 #endif
 
 // ------------------------
@@ -127,12 +122,16 @@ inline uint8_t HAL_get_reset_source() { return MCUSR; }
 
 inline void HAL_reboot() {}  // reboot the board or restart the bootloader
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-extern "C" {
-  int freeMemory();
-}
-#pragma GCC diagnostic pop
+#if GCC_VERSION <= 50000
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
+extern "C" int freeMemory();
+
+#if GCC_VERSION <= 50000
+  #pragma GCC diagnostic pop
+#endif
 
 // ADC
 #ifdef DIDR2

@@ -12,13 +12,12 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "f:/sola_github/H43C/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
-            "projectEnvName": "mks_robin_nano35",
-            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@6.1.1/misc/svd/STM32F103xx.svd",
+            "executable": "f:/sola_github/H43C/H34_NEW_UI/Marlin/Marlin-V2.X-MKS-H43/.pio/build/mega2560/firmware.elf",
+            "projectEnvName": "mega2560",
+            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-atmelavr/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
-                "task": "Pre-Debug (mks_robin_nano35)"
+                "task": "Pre-Debug (mega2560)"
             },
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -26,10 +25,9 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "f:/sola_github/H43C/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
-            "projectEnvName": "mks_robin_nano35",
-            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@6.1.1/misc/svd/STM32F103xx.svd",
+            "executable": "f:/sola_github/H43C/H34_NEW_UI/Marlin/Marlin-V2.X-MKS-H43/.pio/build/mega2560/firmware.elf",
+            "projectEnvName": "mega2560",
+            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

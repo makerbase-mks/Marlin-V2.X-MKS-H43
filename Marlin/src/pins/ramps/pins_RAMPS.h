@@ -67,7 +67,7 @@
 //
 #ifndef SERVO0_PIN
   #ifdef IS_RAMPS_13
-    #define SERVO0_PIN                         7
+    #define SERVO0_PIN                        11
   #else
     #define SERVO0_PIN                        11
   #endif
@@ -510,6 +510,10 @@
       //#define SHIFT_EN                      17
     #endif
 
+  #endif
+
+  #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
+    #define BTN_ENC_EN               LCD_PINS_D7  // Detect the presence of the encoder
   #endif
 
   //

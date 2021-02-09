@@ -55,6 +55,7 @@
 #undef DEBUG_SYNCHRONIZE
 
 #if DEBUG_OUT
+
   #include "debug_section.h"
   #define DEBUG_SECTION(N,S,D)    SectionLog N(PSTR(S),D)
 
@@ -84,7 +85,9 @@
   #define DEBUG_XYZ               SERIAL_XYZ
   #define DEBUG_DELAY(ms)         serial_delay(ms)
   #define DEBUG_SYNCHRONIZE()     planner.synchronize()
+
 #else
+
   #define DEBUG_SECTION(...)        NOOP
   #define DEBUG_PRINT_P(P)          NOOP
   #define DEBUG_ECHO_START()        NOOP

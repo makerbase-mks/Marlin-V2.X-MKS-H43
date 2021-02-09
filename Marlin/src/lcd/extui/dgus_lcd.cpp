@@ -52,36 +52,6 @@ namespace ExtUI {
     while (!ScreenHandler.loop());  // Wait while anything is left to be sent
   }
 
-#if ENABLED(DGUS_LCD_UI_MKS)
-  void onPrintKilled_CH_MKS(uint16_t *error,uint16_t *component) {
-    
-    uint16_t err_buf[] = {0xEDB4,0XF3CE,0X2000};
-    uint16_t rst_buf[] = {0xEBC7,0XD8D6,0XF4C6,0X2000};
-    ScreenHandler.sendinfoscreen_ch_mks(err_buf,error,component,rst_buf);
-    ScreenHandler.GotoScreen(DGUSLCD_SCREEN_KILL);
-    while (!ScreenHandler.loop());  // Wait while anything is left to be sent
-  }
-
-  void onPrintKilled_EN_MKS(char *error, char *component) {
-
-    ScreenHandler.sendinfoscreen_en_mks("Error",error,component,"Please Reset");
-    ScreenHandler.GotoScreen(DGUSLCD_SCREEN_KILL);
-    while (!ScreenHandler.loop());  // Wait while anything is left to be sent
-  }
-
-  void onPrinterKilled_MKS(void *error, void *component) {
-
-    if(DGUSLanguageSwitch == MKS_SimpleChinese) {
-      onPrintKilled_CH_MKS((uint16_t *)error,(uint16_t *)component);
-    }
-    else if (DGUSLanguageSwitch == MKS_SimpleChinese) {
-
-      onPrintKilled_EN_MKS((char *)error,(char *)component);
-    }
-  }
-#endif 
-
-
   void onMediaInserted() { TERN_(SDSUPPORT, ScreenHandler.SDCardInserted()); }
   void onMediaError()    { TERN_(SDSUPPORT, ScreenHandler.SDCardError()); }
   void onMediaRemoved()  { TERN_(SDSUPPORT, ScreenHandler.SDCardRemoved()); }
@@ -106,7 +76,12 @@ namespace ExtUI {
 
   void onStatusChanged(const char * const msg) { ScreenHandler.setstatusmessage(msg); }
 
+  void onHomingStart() {}
+  void onHomingComplete() {}
+  void onPrintFinished() {}
+
   void onFactoryReset() {}
+
   void onStoreSettings(char *buff) {
     // Called when saving to EEPROM (i.e. M500). If the ExtUI needs
     // permanent data to be stored, it can write up to eeprom_data_size bytes
@@ -138,6 +113,8 @@ namespace ExtUI {
   }
 
   #if HAS_MESH
+    void onMeshLevelingStart() {}
+
     void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
       // Called when any mesh points are updated
     }
@@ -178,5 +155,8 @@ namespace ExtUI {
     }
   #endif
 
+  void onSteppersDisabled() {}
+  void onSteppersEnabled()  {}
 }
+
 #endif // HAS_DGUS_LCD

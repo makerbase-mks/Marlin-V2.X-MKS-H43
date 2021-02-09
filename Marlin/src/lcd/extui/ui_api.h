@@ -43,6 +43,7 @@
  ****************************************************************************/
 
 #include "../../inc/MarlinConfig.h"
+#include "../marlinui.h"
 
 namespace ExtUI {
 
@@ -129,8 +130,18 @@ namespace ExtUI {
   float getTravelAcceleration_mm_s2();
   float getFeedrate_percent();
   int16_t getFlowPercentage(const extruder_t);
-  uint8_t getProgress_percent();
+
+  inline uint8_t getProgress_percent() { return ui.get_progress_percent(); }
+
+  #if HAS_PRINT_PROGRESS_PERMYRIAD
+    inline uint16_t getProgress_permyriad() { return ui.get_progress_permyriad(); }
+  #endif
+
   uint32_t getProgress_seconds_elapsed();
+
+  #if ENABLED(SHOW_REMAINING_TIME)
+    inline uint32_t getProgress_seconds_remaining() { return ui.get_remaining_time(); }
+  #endif
 
   #if HAS_LEVELING
     bool getLevelingActive();
@@ -140,6 +151,7 @@ namespace ExtUI {
       bed_mesh_t& getMeshArray();
       float getMeshPoint(const xy_uint8_t &pos);
       void setMeshPoint(const xy_uint8_t &pos, const float zval);
+      void onMeshLevelingStart();
       void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval);
       inline void onMeshUpdate(const xy_int8_t &pos, const float zval) { onMeshUpdate(pos.x, pos.y, zval); }
 
@@ -309,10 +321,6 @@ namespace ExtUI {
   void pausePrint();
   void resumePrint();
 
-  #if ENABLED(DGUS_LCD_UI_MKS)
-    void mks_pausePrint();
-  #endif
-  
   class FileList {
     private:
       uint16_t num_files;
@@ -348,17 +356,21 @@ namespace ExtUI {
   void onPrintTimerStarted();
   void onPrintTimerPaused();
   void onPrintTimerStopped();
+  void onPrintFinished();
   void onFilamentRunout(const extruder_t extruder);
   void onUserConfirmRequired(const char * const msg);
   void onUserConfirmRequired_P(PGM_P const pstr);
   void onStatusChanged(const char * const msg);
   void onStatusChanged_P(PGM_P const pstr);
+  void onHomingStart();
+  void onHomingComplete();
+  void onSteppersDisabled();
+  void onSteppersEnabled();
   void onFactoryReset();
   void onStoreSettings(char *);
   void onLoadSettings(const char *);
   void onConfigurationStoreWritten(bool success);
   void onConfigurationStoreRead(bool success);
-  void onPrinterKilled_MKS(void *error, void *component);
   #if ENABLED(POWER_LOSS_RECOVERY)
     void onPowerLossResume();
   #endif

@@ -80,8 +80,6 @@ bool printingIsActive();
 bool printingIsPaused();
 void startOrResumeJob();
 
-
-
 extern bool wait_for_heatup;
 
 #if HAS_RESUME_CONTINUE
