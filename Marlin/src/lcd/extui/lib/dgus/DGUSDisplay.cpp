@@ -112,8 +112,6 @@ void DGUSDisplay::MKS_WriteVariable(uint16_t adr, uint8_t value)
 }
 #endif
 
-
-
 void DGUSDisplay::WriteVariable(uint16_t adr, long value) {
     union { long l; char lb[4]; } endian;
     char tmp[4];

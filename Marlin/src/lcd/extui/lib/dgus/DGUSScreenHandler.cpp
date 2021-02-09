@@ -44,8 +44,6 @@
   #include "../../../../../src/libs/nozzle.h"
   #include "../../../../module/settings.h"
   #if ENABLED(HAS_STEALTHCHOP)
-    // #include "../../../../src/module/stepper/trinamic.h"
-    // #include "../../../../src/module/stepper/indirection.h"
     #include "../../../../module/stepper/trinamic.h"
     #include "../../../../module/stepper/indirection.h"
   #endif
@@ -119,7 +117,6 @@ void DGUSScreenHandler::sendinfoscreen_ch_mks(const uint16_t* line1, const uint1
   dgusdisplay.WriteVariable(VP_MSGSTR2, line2, 32, true);
   dgusdisplay.WriteVariable(VP_MSGSTR3, line3, 32, true);
   dgusdisplay.WriteVariable(VP_MSGSTR4, line4, 32, true);
-
 }
 
 void DGUSScreenHandler::sendinfoscreen_en_mks(const char* line1, const char* line2, const char* line3, const char* line4) {
@@ -237,8 +234,7 @@ void DGUSScreenHandler::DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var) {
 
 #if ENABLED(DGUS_LCD_UI_MKS)
 
-void DGUSScreenHandler::DGUSLCD_SendBabyStepToDisplay_MKS(DGUS_VP_Variable &var)
-{
+void DGUSScreenHandler::DGUSLCD_SendBabyStepToDisplay_MKS(DGUS_VP_Variable &var) {
   float value = current_position.z;
   DEBUG_ECHOLNPAIR_F(" >> ", value, 6);
   value *= cpow(10, 2);
@@ -1076,7 +1072,7 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
   }
 
 #if ENABLED(MESH_BED_LEVELING)
-uint8_t mesh_point_count = GRID_MAX_POINTS_X * GRID_MAX_POINTS_Y;
+uint16_t mesh_point_count = GRID_MAX_POINTS_X * GRID_MAX_POINTS_Y;
 #endif
 
 void DGUSScreenHandler::Level_Ctrl_MKS(DGUS_VP_Variable &var, void *val_ptr)
@@ -1166,23 +1162,18 @@ void DGUSScreenHandler::MeshLevel(DGUS_VP_Variable &var, void *val_ptr)
   // static uint8_t a_first_level = 1;
   char cmd_buf[30];
   float offset = mesh_adj_distance;
-  int16_t integer, Deci, Deci2;
+  int16_t integer=0, Deci=0, Deci2=0;
 
-  integer = offset; // get int
-  Deci = (offset * 10);
-  Deci = Deci % 10;
-  Deci2 = offset * 100;
-  Deci2 = Deci2 % 10;
+  if (queue.length != 0 ) return;
 
-      // float f3 = current_position.z;
-      // float f4 = current_position.z;
-      switch (mesh_value)
+  switch (mesh_value)
   {
     case 0:
       offset = mesh_adj_distance;
+
       integer = offset; // get int
-      Deci = (offset * 100);
-      Deci = Deci % 100;
+      Deci = (offset * 10);
+      Deci = Deci % 10;
       Deci2 = offset * 100;
       Deci2 = Deci2 % 10;
       soft_endstop._enabled = false;
@@ -1191,12 +1182,12 @@ void DGUSScreenHandler::MeshLevel(DGUS_VP_Variable &var, void *val_ptr)
       queue.enqueue_one_now(cmd_buf);
       queue.enqueue_now_P(PSTR("G90"));
     break;
-
+    
     case 1:
       offset = mesh_adj_distance;
       integer = offset;       // get int
-      Deci = (offset * 100);
-      Deci = Deci % 100;
+      Deci = (offset * 10);
+      Deci = Deci % 10;
       Deci2 = offset * 100;
       Deci2 = Deci2 % 10;
       soft_endstop._enabled = false;
@@ -1280,6 +1271,19 @@ void DGUSScreenHandler::MeshLevel(DGUS_VP_Variable &var, void *val_ptr)
     break;
   }
   #endif
+}
+
+void DGUSScreenHandler::LCD_BLK_Adjust(DGUS_VP_Variable &var, void *val_ptr) {
+
+  uint16_t lcd_value = swap16(*(uint16_t *)val_ptr);
+
+  if(lcd_value > 100) lcd_value = 100;
+  else if(lcd_value < 10) lcd_value = 10;
+
+  lcd_defult_light = lcd_value;
+
+  const uint16_t lcd_data[2] = {lcd_defult_light,lcd_defult_light};
+  dgusdisplay.WriteVariable(0x0082, &lcd_data, 5, true);
 }
 
 void DGUSScreenHandler::ManualAssistLeveling(DGUS_VP_Variable &var, void *val_ptr)
@@ -2299,7 +2303,7 @@ void DGUSScreenHandler::HandleHeaterControl(DGUS_VP_Variable &var, void *val_ptr
     }
 
     // Go to the preheat screen to show the heating progress
-    GotoScreen(DGUSLCD_SCREEN_PREHEAT);
+    //GotoScreen(DGUSLCD_SCREEN_PREHEAT);
   }
 
 #endif
@@ -2357,9 +2361,6 @@ void DGUSScreenHandler::GetManualFilamentSpeed(DGUS_VP_Variable &var, void *val_
             ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POPUP);
           }
           else {
-            // sprintf_P(buf,PSTR("T0\nG91\nG1 E%d F%d\nG90"),(int)distanceFilament,FilamentSpeed * 60);
-            // gcode.process_subcommands_now_P(buf);
-            // queue.enqueue_one_now(buf);
             queue.enqueue_now_P(PSTR("T0"));
             queue.enqueue_now_P(PSTR("G91"));
             snprintf_P(buf,40,PSTR("G1 E%d F%d"),(int)distanceFilament,FilamentSpeed * 60);
@@ -2708,63 +2709,69 @@ bool DGUSScreenHandler::loop() {
       ScreenHandler.LanguagePInit();
       ScreenHandler.DGUS_LanguageDisplay(DGUSLanguageSwitch);
       language_times--;
+
+      const uint16_t lcd_data[2] = {lcd_defult_light,lcd_defult_light};
+      dgusdisplay.WriteVariable(0x0082, &lcd_data, 5, true);
     }
+
+
   #endif
 
   #if ENABLED(SHOW_BOOTSCREEN)
     static bool booted = false;
-
-  #if !ENABLED(DGUS_LCD_UI_MKS)
-    if (!booted && TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
-      booted = true;
-    #endif
-
-    if (!booted && ELAPSED(ms, BOOTSCREEN_TIMEOUT)) {
-      booted = true;
-
-      #if ENABLED(DGUS_LCD_UI_MKS)
-        #if USE_SENSORLESS
-          #if AXIS_HAS_STEALTHCHOP(X)
-            tmc_x_step = stepperX.homing_threshold();
-          #endif
-          #if AXIS_HAS_STEALTHCHOP(Y)
-            tmc_y_step = stepperY.homing_threshold();
-          #endif
-          #if AXIS_HAS_STEALTHCHOP(Z)
-            tmc_z_step = stepperZ.homing_threshold();
-          #endif
-        #endif
-      if (min_ex_temp != 0)
-      {
-        thermalManager.extrude_min_temp = min_ex_temp;
-      }
-
-      DGUS_ExturdeLoadInit();
-
-#if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
-      DGUS_RunoutInit();
-#endif
-
-      if (TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
-      {
-        ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
-      }
-      else
-      {
-        GotoScreen(DGUSLCD_SCREEN_MAIN);
-      }
+      #if !ENABLED(DGUS_LCD_UI_MKS)
+        if (!booted && TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
+          booted = true;
       #endif
-    }
 
-    #if ENABLED(DGUS_LCD_UI_MKS)
-      if(booted) {
-        if(IS_SD_PRINTING() || IS_SD_PAUSED()) {
-          #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
-            DGUS_Runout_Idle();
+      #if DISABLED(USE_MKS_GREEN_UI)
+      if (!booted && ELAPSED(ms, BOOTSCREEN_TIMEOUT)) {
+      #else 
+      if (!booted && ELAPSED(ms, 1000)) {
+      #endif
+        booted = true;
+        #if ENABLED(DGUS_LCD_UI_MKS)
+          #if USE_SENSORLESS
+            #if AXIS_HAS_STEALTHCHOP(X)
+              tmc_x_step = stepperX.homing_threshold();
+            #endif
+            #if AXIS_HAS_STEALTHCHOP(Y)
+              tmc_y_step = stepperY.homing_threshold();
+            #endif
+            #if AXIS_HAS_STEALTHCHOP(Z)
+              tmc_z_step = stepperZ.homing_threshold();
+            #endif
           #endif
+        if (min_ex_temp != 0)
+        {
+          thermalManager.extrude_min_temp = min_ex_temp;
         }
+
+        DGUS_ExturdeLoadInit();
+
+        #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
+              DGUS_RunoutInit();
+        #endif
+
+        if (TERN0(POWER_LOSS_RECOVERY, recovery.valid()))
+        {
+          ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
+        }
+        else
+        {
+          GotoScreen(DGUSLCD_SCREEN_MAIN);
+        }
+        #endif
       }
-    #endif
+        #if ENABLED(DGUS_LCD_UI_MKS)
+          if(booted) {
+            if(IS_SD_PRINTING() || IS_SD_PAUSED()) {
+              #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
+                DGUS_Runout_Idle();
+              #endif
+            }
+          }
+        #endif
   #endif
   return IsScreenComplete();
 }
@@ -3111,11 +3118,8 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
     const char Printting_buf_en[] = "Printing";
     dgusdisplay.WriteVariable(VP_Printting_Dis, Printting_buf_en, 32, true);
 
-
-
-
-
-
+    const char LCD_BLK_buf_en[] = "Backlight";
+    dgusdisplay.WriteVariable(VP_LCD_BLK_Dis, LCD_BLK_buf_en, 32, true);
   }
   else if (var == MKS_SimpleChinese)
   {
@@ -3369,6 +3373,9 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
 
     const uint16_t Printting_buf_ch[] = {0xF2B4,0XA1D3,0XD0D6,0X2000};
     dgusdisplay.WriteVariable(VP_Printting_Dis, Printting_buf_ch, 32, true);
+
+    const uint16_t LCD_BLK_buf_ch[] = {0xB3B1, 0XE2B9 ,0XE8C9 ,0XC3D6 ,0X2000};
+    dgusdisplay.WriteVariable(VP_LCD_BLK_Dis, LCD_BLK_buf_ch, 32, true);
   }
 }
 #endif

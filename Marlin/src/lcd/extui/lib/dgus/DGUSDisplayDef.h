@@ -74,6 +74,8 @@ extern const struct DGUS_VP_Variable ListOfVP[];
 
   extern float z_offset_add;
 
+  extern uint16_t lcd_defult_light;
+
   extern uint16_t tmc_x_step;
   extern uint16_t tmc_y_step;
   extern uint16_t tmc_z_step;
