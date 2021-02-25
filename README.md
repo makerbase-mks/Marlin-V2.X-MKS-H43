@@ -14,8 +14,8 @@ default_envs = mks_robin_nano35
  
 | UI THEME | H43 firmware version | Mainboard Marlin configuration |
 | ------ | ------ | ------ |
-| green-theme-UI | V1.30 | In "DGUSDisplayDef.h" //#define USE_MKS_GREEN_UI |
-| blue-theme-UI  | V1.31 | In "DGUSDisplayDef.h" #define USE_MKS_GREEN_UI |
+| blue-theme-UI | V1.30 | In "DGUSDisplayDef.h" //#define USE_MKS_GREEN_UI |
+| green-theme-UI  | V1.31 | In "DGUSDisplayDef.h" #define USE_MKS_GREEN_UI |
 
 ![](https://github.com/makerbase-mks/MKS-H43/blob/main/Images/BLUE_GREEN.png)
 
