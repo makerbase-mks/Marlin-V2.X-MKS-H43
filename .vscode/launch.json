@@ -12,10 +12,10 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "f:/sola_github/H43C/H34_NEW_UI/Marlin/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
+            "executable": "f:/sola_github/H43C/H43_github/mks_h43_release/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
             "projectEnvName": "mks_robin_nano35",
             "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32/misc/svd/STM32F103xx.svd",
+            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F103xx.svd",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug (mks_robin_nano35)"
@@ -26,10 +26,10 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "f:/sola_github/H43C/H34_NEW_UI/Marlin/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
+            "executable": "f:/sola_github/H43C/H43_github/mks_h43_release/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
             "projectEnvName": "mks_robin_nano35",
             "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32/misc/svd/STM32F103xx.svd",
+            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F103xx.svd",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]
