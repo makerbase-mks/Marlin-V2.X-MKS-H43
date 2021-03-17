@@ -23,8 +23,6 @@
 
 #include "../DGUSDisplayDef.h"
 
-#define USE_MKS_GREEN_UI      
-
 #if ENABLED(USE_MKS_GREEN_UI)
 #define LOGO_TIME_DELAY       5000
 #else
