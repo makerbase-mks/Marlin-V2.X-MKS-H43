@@ -103,7 +103,7 @@
  *
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-#define SERIAL_PORT 0
+#define SERIAL_PORT 3
 
 /**
  * Select a secondary serial port on the board to use for communication with the host.
@@ -128,7 +128,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-#define MOTHERBOARD BOARD_MKS_GEN_L_V21 
+#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2 
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -2263,7 +2263,9 @@
 //#define DGUS_LCD_UI_ORIGIN
 //#define DGUS_LCD_UI_FYSETC
 //#define DGUS_LCD_UI_HIPRECY
+
 #define DGUS_LCD_UI_MKS
+// #define USE_MKS_GREEN_UI
 
 //
 // Touch-screen LCD for Malyan M200/M300 printers
