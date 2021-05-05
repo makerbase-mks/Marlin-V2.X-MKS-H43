@@ -1,5 +1,5 @@
 // AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
-
+//
 // PIO Unified Debugger
 //
 // Documentation: https://docs.platformio.org/page/plus/debugging.html
@@ -8,29 +8,41 @@
 {
     "version": "0.2.0",
     "configurations": [
+        // {
+        //     "type": "platformio-debug",
+        //     "request": "launch",
+        //     "name": "PIO Debug",
+        //     "executable": "F:/sola_github/DGUS/H43/H43C/H43_github/my_h43_debug/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano_v3_usb_flash_drive/firmware.elf",
+        //     "projectEnvName": "mks_robin_nano_v3_usb_flash_drive",
+        //     "toolchainBinDir": "C:/Users/SOLA/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+        //     "internalConsoleOptions": "openOnSessionStart",
+        //     "svdPath": "C:/Users/SOLA/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F40x.svd",
+        //     "preLaunchTask": {
+        //         "type": "PlatformIO",
+        //         "task": "Pre-Debug (mks_robin_nano_v3_usb_flash_drive)"
+        //     }
+        // },
+        // {
+        //     "type": "platformio-debug",
+        //     "request": "launch",
+        //     "name": "PIO Debug (skip Pre-Debug)",
+        //     "executable": "F:/sola_github/DGUS/H43/H43C/H43_github/my_h43_debug/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano_v3_usb_flash_drive/firmware.elf",
+        //     "projectEnvName": "mks_robin_nano_v3_usb_flash_drive",
+        //     "toolchainBinDir": "C:/Users/SOLA/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+        //     "internalConsoleOptions": "openOnSessionStart",
+        //     "svdPath": "C:/Users/SOLA/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F40x.svd"
+        // },
         {
-            "type": "platformio-debug",
+            "type": "cortex-debug",
             "request": "launch",
-            "name": "PIO Debug",
-            "executable": "f:/sola_github/H43C/H43_github/mks_h43_release/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
-            "projectEnvName": "mks_robin_nano35",
-            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F103xx.svd",
-            "preLaunchTask": {
-                "type": "PlatformIO",
-                "task": "Pre-Debug (mks_robin_nano35)"
-            },
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "type": "platformio-debug",
-            "request": "launch",
-            "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "f:/sola_github/H43C/H43_github/mks_h43_release/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano35/firmware.elf",
-            "projectEnvName": "mks_robin_nano35",
-            "toolchainBinDir": "C:/Users/Administrator.USER-20191219ZU/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
-            "svdPath": "C:/Users/Administrator.USER-20191219ZU/.platformio/platforms/ststm32@10.0.1/misc/svd/STM32F103xx.svd",
-            "internalConsoleOptions": "openOnSessionStart"
+            "servertype": "jlink",
+            "cwd": "${workspaceRoot}",
+            "executable": "F:/sola_github/DGUS/H43/H43C/H43_github/my_h43_debug/Marlin-V2.X-MKS-H43/.pio/build/mks_robin_nano_v3_usb_flash_drive/firmware.elf",  
+            "name": "Debug (J-Link)",
+            "device": "STM32F407VG",
+            "interface": "swd",
+            //"ipAddress": null,
+            //"serialNumber": null,
         }
     ]
 }

@@ -40,12 +40,8 @@ void GcodeSuite::M105() {
         , parser.boolval('R')
       #endif
     );
-
     SERIAL_EOL();
-
   #else
-
     SERIAL_ECHOLNPGM(" T:0"); // Some hosts send M105 to test the serial connection
-
   #endif
 }

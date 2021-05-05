@@ -1056,6 +1056,7 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
         DGUSLanguageSwitch = MKS_SimpleChinese;
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_Choose);
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
+        dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_NoChoose);
         settings.save();
       break;
 
@@ -1064,8 +1065,19 @@ void DGUSScreenHandler::HandleManualExtrude(DGUS_VP_Variable &var, void *val_ptr
         DGUSLanguageSwitch = MKS_English;
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_NoChoose);
         dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_Choose);
+        dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_NoChoose);
         settings.save();
       break;
+
+      case MKS_Russia:
+        DGUS_LanguageDisplay(MKS_Russia);
+        DGUSLanguageSwitch = MKS_Russia;
+        dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_NoChoose);
+        dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
+        dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_Choose);
+        settings.save();
+      break;
+
       default:
       break;
     }
@@ -2713,8 +2725,6 @@ bool DGUSScreenHandler::loop() {
       const uint16_t lcd_data[2] = {lcd_defult_light,lcd_defult_light};
       dgusdisplay.WriteVariable(0x0082, &lcd_data, 5, true);
     }
-
-
   #endif
 
   #if ENABLED(SHOW_BOOTSCREEN)
@@ -2791,11 +2801,25 @@ void DGUSScreenHandler::LanguagePInit()
     case MKS_SimpleChinese:
       dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_Choose);
       dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_NoChoose);
+
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_Choose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_NoChoose);
     break;
     case MKS_English:
+
       dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_NoChoose);
       dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_Choose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_NoChoose);
     break;
+
+    case MKS_Russia:
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE1,MKS_Language_NoChoose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE2,MKS_Language_NoChoose);
+      dgusdisplay.MKS_WriteVariable(VP_LANGUAGE_CHANGE3,MKS_Language_Choose);
+    break;
+
     default:
       break;
   }
@@ -3123,44 +3147,44 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
   }
   else if (var == MKS_SimpleChinese)
   {
-    uint16_t home_buf_ch[] = {0xF7D6,0xB3D2};
-    dgusdisplay.WriteVariable(VP_HOME_Dis, home_buf_ch, 4, true);
+    uint16_t home_buf_ch[] = {0xF7D6,0xB3D2,0x2000};
+    dgusdisplay.WriteVariable(VP_HOME_Dis, home_buf_ch, 32, true);
 
-    const uint16_t Setting_Dis[] PROGMEM = {0xE8C9,0xC3D6,0x2000,0x2000,0x2000};
-    dgusdisplay.WriteVariable(VP_Setting_Dis, Setting_Dis, 7, true);
+    const uint16_t Setting_Dis[] PROGMEM = {0xE8C9,0xC3D6,0x2000};
+    dgusdisplay.WriteVariable(VP_Setting_Dis, Setting_Dis, 32, true);
 
-    const uint16_t Tool_Dis[] PROGMEM = {0xA4B9,0xDFBE};
-    dgusdisplay.WriteVariable(VP_Tool_Dis, Tool_Dis, 4, true);
+    const uint16_t Tool_Dis[] PROGMEM = {0xA4B9,0xDFBE,0x2000};
+    dgusdisplay.WriteVariable(VP_Tool_Dis, Tool_Dis, 32, true);
 
     const uint16_t Print_buf_ch[] PROGMEM = {0xF2B4,0xA1D3,0x2000};
-    dgusdisplay.WriteVariable(VP_Print_Dis, Print_buf_ch, 6, true);
+    dgusdisplay.WriteVariable(VP_Print_Dis, Print_buf_ch, 32, true);
 
     const uint16_t Language_buf_ch[] = {0xEFD3,0xD4D1,0x2000,0x2000};
-    dgusdisplay.WriteVariable(VP_Language_Dis, Language_buf_ch, 8, true);
+    dgusdisplay.WriteVariable(VP_Language_Dis, Language_buf_ch, 32, true);
 
     const uint16_t About_buf_ch[] = {0xD8B9,0xDAD3,0x2000};
-    dgusdisplay.WriteVariable(VP_About_Dis, About_buf_ch, 6, true);
+    dgusdisplay.WriteVariable(VP_About_Dis, About_buf_ch, 32, true);
 
     const uint16_t Config_buf_ch[] = {0xE4C5,0xC3D6,0x2000};
-    dgusdisplay.WriteVariable(VP_Config_Dis, Config_buf_ch, 6, true);
+    dgusdisplay.WriteVariable(VP_Config_Dis, Config_buf_ch, 32, true);
 
     const uint16_t MotorConfig_buf_ch[] = {0xE7B5,0xFABB,0xE4C5,0xC3D6,0x2000};
-    dgusdisplay.WriteVariable(VP_MotorConfig_Dis, MotorConfig_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_MotorConfig_Dis, MotorConfig_buf_ch, 32, true);
 
     const uint16_t LevelConfig_buf_ch[] = {0xD6CA,0XAFB6,0XF7B5,0XBDC6,0XE8C9,0XC3D6,0x2000};
     dgusdisplay.WriteVariable(VP_LevelConfig_Dis, LevelConfig_buf_ch, 32, true);
 
     const uint16_t TemperatureConfig_buf_ch[] = {0xC2CE,0XC8B6,0x2000};
-    dgusdisplay.WriteVariable(VP_TemperatureConfig_Dis, TemperatureConfig_buf_ch, 11, true);
+    dgusdisplay.WriteVariable(VP_TemperatureConfig_Dis, TemperatureConfig_buf_ch, 32, true);
 
     const uint16_t Advance_buf_ch[] = {0xdfb8,0xB6BC,0XE8C9,0XC3D6,0x2000};
-    dgusdisplay.WriteVariable(VP_Advance_Dis, Advance_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Advance_Dis, Advance_buf_ch, 32, true);
 
     const uint16_t Filament_buf_ch[] = {0xB7BC,0xF6B3,0X2000};
-    dgusdisplay.WriteVariable(VP_Filament_Dis, Filament_buf_ch, 8, true);
+    dgusdisplay.WriteVariable(VP_Filament_Dis, Filament_buf_ch, 32, true);
 
     const uint16_t Move_buf_ch[] = {0xC6D2,0xAFB6,0x2000 };
-    dgusdisplay.WriteVariable(VP_Move_Dis, Move_buf_ch, 4, true);
+    dgusdisplay.WriteVariable(VP_Move_Dis, Move_buf_ch, 32, true);
 
     #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
     const uint16_t Level_buf_ch[] = {0xD4D7,0xAFB6,0xf7b5,0xbdc6,0x2000};
@@ -3174,142 +3198,142 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
     #endif
 
     const uint16_t MotorPluse_buf_ch[] = {0XF6C2,0XE5B3,0X2000};
-    dgusdisplay.WriteVariable(VP_MotorPluse_Dis, MotorPluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_MotorPluse_Dis, MotorPluse_buf_ch, 32, true);
 
     const uint16_t MotorMaxSpeed_buf_ch[] = {0XEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_MotorMaxSpeed_Dis, MotorMaxSpeed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_MotorMaxSpeed_Dis, MotorMaxSpeed_buf_ch, 32, true);
 
     const uint16_t MotorMaxAcc_buf_ch[] ={0XEED7,0XF3B4,0XD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_MotorMaxAcc_Dis, MotorMaxAcc_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_MotorMaxAcc_Dis, MotorMaxAcc_buf_ch, 32, true);
 
     const uint16_t TravelAcc_buf_ch[] = {0XD5BF,0XD0D0,0XD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_TravelAcc_Dis, TravelAcc_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TravelAcc_Dis, TravelAcc_buf_ch, 32, true);
 
     const uint16_t FeedRateMin_buf_ch[] = {0XEED7,0XA1D0,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_FeedRateMin_Dis, FeedRateMin_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_FeedRateMin_Dis, FeedRateMin_buf_ch, 32, true);
 
     const uint16_t TravelFeeRateMin_buf_ch[] = {0XD5BF,0XD0D0,0XEED7,0XA1D0,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_TravelFeeRateMin_Dis, TravelFeeRateMin_buf_ch, 24, true);
+    dgusdisplay.WriteVariable(VP_TravelFeeRateMin_Dis, TravelFeeRateMin_buf_ch, 32, true);
 
     const uint16_t Acc_buf_ch[] = {0XD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_ACC_Dis, Acc_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_ACC_Dis, Acc_buf_ch, 32, true);
 
     const uint16_t Point_One_buf_ch[] = {0XDAB5,0XBBD2,0XE3B5,0X2000};
-    dgusdisplay.WriteVariable(VP_Point_One_Dis, Point_One_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Point_One_Dis, Point_One_buf_ch, 32, true);
 
     const uint16_t Point_Two_buf_ch[] = {0XDAB5,0XFEB6,0XE3B5,0X2000};
-    dgusdisplay.WriteVariable(VP_Point_Two_Dis, Point_Two_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Point_Two_Dis, Point_Two_buf_ch, 32, true);
 
     const uint16_t Point_Three_buf_ch[] = {0XDAB5,0XFDC8,0XE3B5,0X2000};
-    dgusdisplay.WriteVariable(VP_Point_Three_Dis, Point_Three_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Point_Three_Dis, Point_Three_buf_ch, 32, true);
 
     const uint16_t Point_Four_buf_ch[] = {0XDAB5,0XC4CB,0XE3B5,0X2000};
-    dgusdisplay.WriteVariable(VP_Point_Four_Dis, Point_Four_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Point_Four_Dis, Point_Four_buf_ch, 32, true);
 
     const uint16_t Point_Five_buf_ch[] = {0XDAB5,0XE5CE,0XE3B5,0X2000};
-    dgusdisplay.WriteVariable(VP_Point_Five_Dis, Point_Five_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Point_Five_Dis, Point_Five_buf_ch, 32, true);
 
     const uint16_t Extrusion_buf_ch[] = {0xB7BC,0XF6B3,0XB7CD,0X2000};
-    dgusdisplay.WriteVariable(VP_Extrusion_Dis, Extrusion_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_Extrusion_Dis, Extrusion_buf_ch, 32, true);
 
     const uint16_t HeatBed_buf_ch[] = {0XC8C8,0XB2B4,0X2000};
-    dgusdisplay.WriteVariable(VP_HeatBed_Dis, HeatBed_buf_ch, 12, true);
+    dgusdisplay.WriteVariable(VP_HeatBed_Dis, HeatBed_buf_ch, 32, true);
 
     const uint16_t FactoryDefaults_buf_ch[] = {0xD6BB,0XB4B8,0XF6B3,0XA7B3,0XE8C9,0XC3D6,0X2000};
-    dgusdisplay.WriteVariable(VP_FactoryDefaults_Dis, FactoryDefaults_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_FactoryDefaults_Dis, FactoryDefaults_buf_ch, 32, true);
 
     const uint16_t StoreSetting_buf_ch[] = {0XA3B1,0XE6B4,0XE8C9,0XC3D6,0X2000};
-    dgusdisplay.WriteVariable(VP_StoreSetting_Dis, StoreSetting_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_StoreSetting_Dis, StoreSetting_buf_ch, 32, true);
 
     const uint16_t PrintPauseConfig_buf_ch[] = {0XDDD4,0XA3CD,0XBBCE,0XC3D6,0X2000};
     dgusdisplay.WriteVariable(VP_PrintPauseConfig_Dis, PrintPauseConfig_buf_ch, 32, true);
 
     const uint16_t X_Pluse_buf_ch[] = {0x2058,0xE1D6,0XF6C2,0XE5B3,0x2000};
-    dgusdisplay.WriteVariable(VP_X_Pluse_Dis, X_Pluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_X_Pluse_Dis, X_Pluse_buf_ch, 32, true);
 
     const uint16_t Y_Pluse_buf_ch[] = {0x2059,0xE1D6,0XF6C2,0XE5B3,0x2000};
-    dgusdisplay.WriteVariable(VP_Y_Pluse_Dis, Y_Pluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Y_Pluse_Dis, Y_Pluse_buf_ch, 32, true);
 
     const uint16_t Z_Pluse_buf_ch[] = {0x205A,0xE1D6,0XF6C2,0XE5B3,0x2000};
-    dgusdisplay.WriteVariable(VP_Z_Pluse_Dis, Z_Pluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Z_Pluse_Dis, Z_Pluse_buf_ch, 32, true);
 
     const uint16_t E0_Pluse_buf_ch[] = {0x3045,0xE1D6,0XF6C2,0XE5B3,0x2000};
-    dgusdisplay.WriteVariable(VP_E0_Pluse_Dis, E0_Pluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E0_Pluse_Dis, E0_Pluse_buf_ch, 32, true);
 
     const uint16_t E1_Pluse_buf_ch[] = {0x3145,0xE1D6,0XF6C2,0XE5B3,0x2000};
-    dgusdisplay.WriteVariable(VP_E1_Pluse_Dis, E1_Pluse_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E1_Pluse_Dis, E1_Pluse_buf_ch, 32, true);
 
     const uint16_t X_Max_Speed_buf_ch[] = {0x2058,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_X_Max_Speed_Dis, X_Max_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_X_Max_Speed_Dis, X_Max_Speed_buf_ch, 32, true);
 
     const uint16_t Y_Max_Speed_buf_ch[] = {0x2059,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Y_Max_Speed_Dis, Y_Max_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Y_Max_Speed_Dis, Y_Max_Speed_buf_ch, 32, true);
 
     const uint16_t Z_Max_Speed_buf_ch[] = {0x205A,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Z_Max_Speed_Dis, Z_Max_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Z_Max_Speed_Dis, Z_Max_Speed_buf_ch, 32, true);
 
     const uint16_t E0_Max_Speed_buf_ch[] = {0x3045,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E0_Max_Speed_Dis, E0_Max_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E0_Max_Speed_Dis, E0_Max_Speed_buf_ch, 32, true);
 
     const uint16_t E1_Max_Speed_buf_ch[] = {0x3145,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E1_Max_Speed_Dis, E1_Max_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E1_Max_Speed_Dis, E1_Max_Speed_buf_ch, 32, true);
 
     const uint16_t X_Max_Acc_Speed_buf_ch[] = {0x2058,0xEED7,0xF3B4,0xD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_X_Max_Acc_Speed_Dis, X_Max_Acc_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_X_Max_Acc_Speed_Dis, X_Max_Acc_Speed_buf_ch, 32, true);
 
     const uint16_t Y_Max_Acc_Speed_buf_ch[] = {0x2059,0xEED7,0xF3B4,0xD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Y_Max_Acc_Speed_Dis, Y_Max_Acc_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Y_Max_Acc_Speed_Dis, Y_Max_Acc_Speed_buf_ch, 32, true);
 
     const uint16_t Z_Max_Acc_Speed_buf_ch[] = {0x205A,0xEED7,0xF3B4,0xD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Z_Max_Acc_Speed_Dis, Z_Max_Acc_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Z_Max_Acc_Speed_Dis, Z_Max_Acc_Speed_buf_ch, 32, true);
 
     const uint16_t E0_Max_Acc_Speed_buf_ch[] ={0x3045,0xEED7,0xF3B4,0xD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E0_Max_Acc_Speed_Dis, E0_Max_Acc_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E0_Max_Acc_Speed_Dis, E0_Max_Acc_Speed_buf_ch, 32, true);
 
     const uint16_t E1_Max_Acc_Speed_buf_ch[] = {0x3145,0xEED7,0xF3B4,0xD3BC,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E1_Max_Acc_Speed_Dis, E1_Max_Acc_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E1_Max_Acc_Speed_Dis, E1_Max_Acc_Speed_buf_ch, 32, true);
 
     const uint16_t X_PARK_POS_buf_ch[] = {0X2058,0XDDD4,0XA3CD,0XBBCE,0XC3D6,0X2000};
-    dgusdisplay.WriteVariable(VP_X_PARK_POS_Dis, X_PARK_POS_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_X_PARK_POS_Dis, X_PARK_POS_buf_ch, 32, true);
 
     const uint16_t Y_PARK_POS_buf_ch[] = {0X2059,0XDDD4,0XA3CD,0XBBCE,0XC3D6,0X2000};
-    dgusdisplay.WriteVariable(VP_Y_PARK_POS_Dis, Y_PARK_POS_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Y_PARK_POS_Dis, Y_PARK_POS_buf_ch, 32, true);
 
     const uint16_t Z_PARK_POS_buf_ch[] = {0X205A,0xA7CC,0XFDC9,0XDFB8,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Z_PARK_POS_Dis, Z_PARK_POS_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Z_PARK_POS_Dis, Z_PARK_POS_buf_ch, 32, true);
 
     const uint16_t Length_buf_ch[] = {0XBDB2,0XA4B3,0X2000};
-    dgusdisplay.WriteVariable(VP_Length_Dis, Length_buf_ch, 8, true);
+    dgusdisplay.WriteVariable(VP_Length_Dis, Length_buf_ch, 32, true);
 
     const uint16_t Speed_buf_ch[] = {0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Speed_Dis, Speed_buf_ch, 8, true);
+    dgusdisplay.WriteVariable(VP_Speed_Dis, Speed_buf_ch, 32, true);
 
     const uint16_t InOut_buf_ch[] = {0XF8BD,0XF6B3,0X2000};
-    dgusdisplay.WriteVariable(VP_InOut_Dis, InOut_buf_ch, 8, true);
+    dgusdisplay.WriteVariable(VP_InOut_Dis, InOut_buf_ch, 32, true);
 
     const uint16_t PrintTimet_buf_en[] = {0XF2B4,0XA1D3,0XB1CA,0XE4BC,0X2000};
-    dgusdisplay.WriteVariable(VP_PrintTime_Dis, PrintTimet_buf_en, 16, true);
+    dgusdisplay.WriteVariable(VP_PrintTime_Dis, PrintTimet_buf_en, 32, true);
 
     const uint16_t E0_Temp_buf_ch[] = {0x3045,0XC2CE,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E0_Temp_Dis, E0_Temp_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E0_Temp_Dis, E0_Temp_buf_ch, 32, true);
 
     const uint16_t E1_Temp_buf_ch[] = {0x3145,0XC2CE,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_E1_Temp_Dis, E1_Temp_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_E1_Temp_Dis, E1_Temp_buf_ch, 32, true);
 
     const uint16_t HB_Temp_buf_ch[] = {0XC8C8,0XB2B4,0XC2CE,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_HB_Temp_Dis, HB_Temp_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_HB_Temp_Dis, HB_Temp_buf_ch, 32, true);
 
     const uint16_t Feedrate_buf_ch[] = {0XB7BC,0XF6B3,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_Feedrate_Dis, Feedrate_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Feedrate_Dis, Feedrate_buf_ch, 32, true);
 
     const uint16_t PrintAcc_buf_ch[] = {0xF2B4,0XA1D3,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_PrintAcc_Dis, PrintAcc_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_PrintAcc_Dis, PrintAcc_buf_ch, 32, true);
 
     const uint16_t FAN_Speed_buf_ch[] = {0XE7B7,0XC8C9,0XD9CB,0XC8B6,0X2000};
-    dgusdisplay.WriteVariable(VP_FAN_Speed_Dis, FAN_Speed_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_FAN_Speed_Dis, FAN_Speed_buf_ch, 32, true);
 
     const uint16_t Printing_buf_ch[] = {0XF2B4,0XA1D3,0XD0D6,0X2000};
-    dgusdisplay.WriteVariable(VP_Printing_Dis, Printing_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_Printing_Dis, Printing_buf_ch, 32, true);
 
     const uint16_t Info_EEPROM_1_buf_ch[] = {0XC7CA,0XF1B7,0XA3B1,0XE6B4,0XE8C9,0XC3D6,0XBFA3,0X2000};
     dgusdisplay.WriteVariable(VP_Info_EEPROM_1_Dis, Info_EEPROM_1_buf_ch, 32, true);
@@ -3318,40 +3342,40 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
     dgusdisplay.WriteVariable(VP_Info_EEPROM_2_Dis, Info_EEPROM_2_buf_ch, 32, true);
 
     const uint16_t TMC_X_Step_buf_ch[] = {0X2058,0XE9C1,0XF4C3,0XC8B6,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_X_Step_Dis, TMC_X_Step_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_X_Step_Dis, TMC_X_Step_buf_ch, 32, true);
 
     const uint16_t TMC_Y_Step_buf_ch[] = {0X2059,0XE9C1,0XF4C3,0XC8B6,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Y_Step_Dis, TMC_Y_Step_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Y_Step_Dis, TMC_Y_Step_buf_ch, 32, true);
 
     const uint16_t TMC_Z_Step_buf_ch[] = {0X205A,0XE9C1,0XF4C3,0XC8B6,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Z_Step_Dis, TMC_Z_Step_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Z_Step_Dis, TMC_Z_Step_buf_ch, 32, true);
 
     const uint16_t Info_PrinfFinsh_1_buf_ch[] = {0XF2B4,0XA1D3,0XEACD,0XC9B3,0X2000};
     dgusdisplay.WriteVariable(VP_Info_PrinfFinsh_1_Dis, Info_PrinfFinsh_1_buf_ch, 32, true);
 
     const uint16_t TMC_X_Current_buf_ch[] = {0X2058,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_X_Current_Dis, TMC_X_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_X_Current_Dis, TMC_X_Current_buf_ch, 32, true);
 
     const uint16_t TMC_Y_Current_buf_ch[] = {0X2059,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Y_Current_Dis, TMC_Y_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Y_Current_Dis, TMC_Y_Current_buf_ch, 32, true);
 
     const uint16_t TMC_Z_Current_buf_ch[] = {0X205A,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Z_Current_Dis, TMC_Z_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Z_Current_Dis, TMC_Z_Current_buf_ch, 32, true);
 
     const uint16_t TMC_E0_Current_buf_ch[] = {0X3045,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_E0_Current_Dis, TMC_E0_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_E0_Current_Dis, TMC_E0_Current_buf_ch, 32, true);
 
     const uint16_t TMC_X1_Current_buf_ch[] = {0X3158,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_X1_Current_Dis, TMC_X1_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_X1_Current_Dis, TMC_X1_Current_buf_ch, 32, true);
 
     const uint16_t TMC_Y1_Current_buf_ch[] = {0X3159,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Y1_Current_Dis, TMC_Y1_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Y1_Current_Dis, TMC_Y1_Current_buf_ch, 32, true);
 
     const uint16_t TMC_Z1_Current_buf_ch[] = {0X315A,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_Z1_Current_Dis, TMC_Z1_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_Z1_Current_Dis, TMC_Z1_Current_buf_ch, 32, true);
 
     const uint16_t TMC_E1_Current_buf_ch[] = {0X3145,0XE1D6,0XE7B5,0XF7C1,0x2000};
-    dgusdisplay.WriteVariable(VP_TMC_E1_Current_Dis, TMC_E1_Current_buf_ch, 16, true);
+    dgusdisplay.WriteVariable(VP_TMC_E1_Current_Dis, TMC_E1_Current_buf_ch, 32, true);
 
     const uint16_t Min_Ex_Temp_buf_ch[] = {0xEED7,0XA1D0,0XB7BC,0XF6B3,0XC2CE,0XC8B6,0X2000};
     dgusdisplay.WriteVariable(VP_Min_Ex_Temp_Dis, Min_Ex_Temp_buf_ch, 32, true);
@@ -3376,6 +3400,262 @@ void DGUSScreenHandler::DGUS_LanguageDisplay(uint8_t var)
 
     const uint16_t LCD_BLK_buf_ch[] = {0xB3B1, 0XE2B9 ,0XE8C9 ,0XC3D6 ,0X2000};
     dgusdisplay.WriteVariable(VP_LCD_BLK_Dis, LCD_BLK_buf_ch, 32, true);
+  }
+  else if (var == MKS_Russia)
+  {
+    uint16_t home_buf_ru[] = {0xA5A7,0xE0A7, 0xDEA7, 0xE0A7, 0xDBA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_HOME_Dis, home_buf_ru, 32, true);
+
+    const uint16_t Setting_Dis_ru[] PROGMEM = {0xAFA7, 0xD1A7, 0xA3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xDAA7,0x2000};
+    dgusdisplay.WriteVariable(VP_Setting_Dis, Setting_Dis_ru, 32, true);
+
+    const uint16_t Tool_Dis_ru[] PROGMEM = {0xAAA7,	0xDFA7,	0xE3A7,	0xE4A7,	0xE2A7,	0xE5A7,	0xDEA7,	0xD6A7,	0xDFA7,	0xE4A7,	0xEDA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Tool_Dis, Tool_Dis_ru, 32, true);
+
+    const uint16_t Print_buf_ru[] PROGMEM = {0xB1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Print_Dis, Print_buf_ru, 32, true);
+
+    const uint16_t Language_buf_ru[] = {0xC1A7, 0xD9A7, 0xEDA7, 0xDCA7 ,0x2000};
+    dgusdisplay.WriteVariable(VP_Language_Dis, Language_buf_ru, 32, true);
+
+    const uint16_t About_buf_ru[] = {0xB0A7, 0xD2A7, 0x0020, 0xE5A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xE3A7, 0xE4A7, 0xD3A7, 0xD6A7, 0x2000};
+    dgusdisplay.WriteVariable(VP_About_Dis, About_buf_ru, 32, true);
+
+    const uint16_t Config_buf_ru[] = {0xACA7, 0xE0A7, 0xDFA7, 0xE6A7, 0xDAA7, 0xD4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0xE8A7, 0xDAA7, 0xF1A7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Config_Dis, Config_buf_ru, 32, true);
+
+    const uint16_t MotorConfig_buf_ru[] = {0xAFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xD1A7, 0x20, 0xAEA7, 0xE0A7, 0xE4A7, 0xE0A7, 0xE2A7, 0xE0A7, 0xD3A7,0x2000};
+    dgusdisplay.WriteVariable(VP_MotorConfig_Dis, MotorConfig_buf_ru, 32, true);
+
+    const uint16_t LevelConfig_buf_ru[] = {0xAFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xD1A7, 0x2000, 0xE5A7, 0xE2A7, 0xE0A7, 0xD3A7, 0xDFA7, 0xF1A7, 0x2000};
+    dgusdisplay.WriteVariable(VP_LevelConfig_Dis, LevelConfig_buf_ru, 32, true);
+
+    const uint16_t TemperatureConfig_buf_ru[] = {0xB4A7, 0xD6A7, 0xDEA7, 0xE1A7, 0xD6A7, 0xE2A7, 0xD1A7, 0xE4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TemperatureConfig_Dis, TemperatureConfig_buf_ru, 32, true);
+
+    const uint16_t Advance_buf_ru[] = {0xB1A7, 0xE2A7, 0xE0A7, 0xD5A7, 0xD3A7, 0xDAA7, 0xDFA7, 0xE5A7, 0xE4A7, 0xEDA7, 0xD6A7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Advance_Dis, Advance_buf_ru, 32, true);
+
+    const uint16_t Filament_buf_ru[] = {0xBFA7, 0xDCA7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE5A7, 0xD5A7, 0xDAA7, 0xE2A7, 0xE0A7, 0xD3A7, 0xD1A7, 0xDFA7, 0xDAA7, 0xD6A7,0X2000};
+    dgusdisplay.WriteVariable(VP_Filament_Dis, Filament_buf_ru, 32, true);
+
+    const uint16_t Move_buf_ru[] = {0xA5A7, 0xD3A7, 0xDAA7, 0xD8A7, 0xD6A7, 0xDFA7, 0xDAA7, 0xD6A7,0x2000 };
+    dgusdisplay.WriteVariable(VP_Move_Dis, Move_buf_ru, 32, true);
+
+    #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+    const uint16_t Level_buf_ru[] = {0xA1A7, 0xD3A7, 0xE4A7, 0xE0A7, 0xE5A7, 0xE2A7, 0xE0A7, 0xD3A7, 0xD6A7, 0xDFA7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Level_Dis, Level_buf_ru, 32, true);
+    #elif ENABLED(MESH_BED_LEVELING)
+    const uint16_t Level_buf_ru[] = {0xA3A7, 0xEDA7, 0xE2A7, 0xE0A7, 0xD3A7, 0xDFA7, 0xF1A7, 0xE4A7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_Level_Dis, Level_buf_ru, 32, true);
+    #else
+    const uint16_t Level_buf_ch[] = {0xB5A7, 0xE2A7, 0xE0A7, 0xD3A7, 0xD6A7, 0xDFA7, 0xEEA7,0x2000};
+    dgusdisplay.WriteVariable(VP_Level_Dis, Level_buf_ch, 32, true);
+    #endif
+
+    const uint16_t MotorPluse_buf_ru[] = {0xDAA7, 0xDEA7, 0xE1A7, 0xE5A7, 0xDDA7, 0xEEA7, 0xE3A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_MotorPluse_Dis, MotorPluse_buf_ru, 32, true);
+
+    const uint16_t MotorMaxSpeed_buf_ru[] = {0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_MotorMaxSpeed_Dis, MotorMaxSpeed_buf_ru, 32, true);
+
+    const uint16_t MotorMaxAcc_buf_ru[] ={0xB5A7, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0xDAA7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_MotorMaxAcc_Dis, MotorMaxAcc_buf_ru, 32, true);
+
+    const uint16_t TravelAcc_buf_ru[] = {0xB5A7, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0xDAA7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_TravelAcc_Dis, TravelAcc_buf_ru, 32, true);
+
+    const uint16_t FeedRateMin_buf_ru[] = {0xAEA7, 0xDAA7, 0xDFA7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7,0X2000};
+    dgusdisplay.WriteVariable(VP_FeedRateMin_Dis, FeedRateMin_buf_ru, 32, true);
+
+    const uint16_t TravelFeeRateMin_buf_ru[] = {0xAEA7, 0xDAA7, 0xDFA7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xE0A7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_TravelFeeRateMin_Dis, TravelFeeRateMin_buf_ru, 32, true);
+
+    const uint16_t Acc_buf_ru[] = {0xB5A7, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0xDAA7, 0xF1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_ACC_Dis, Acc_buf_ru, 32, true);
+
+    const uint16_t Point_One_buf_ru[] = {0xB1A7, 0xD6A7, 0xE2A7, 0xD3A7, 0xD1A7, 0xF1A7, 0x2000, 0xE4A7, 0xE0A7, 0xE9A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Point_One_Dis, Point_One_buf_ru, 32, true);
+
+    const uint16_t Point_Two_buf_ru[] = {0xA3A7, 0xE4A7, 0xE0A7, 0xE2A7, 0xD1A7, 0xF1A7, 0x2000,0xE4A7, 0xE0A7, 0xE9A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Point_Two_Dis, Point_Two_buf_ru, 32, true);
+
+    const uint16_t Point_Three_buf_ru[] = {0xB4A7, 0xE2A7, 0xD6A7, 0xE4A7, 0xEEA7, 0xF1A7, 0x2000, 0xE4A7, 0xE0A7, 0xE9A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Point_Three_Dis, Point_Three_buf_ru, 32, true);
+
+    const uint16_t Point_Four_buf_ru[] = {0xB9A7, 0xD6A7, 0xE4A7, 0xD3A7, 0xD6A7, 0xE2A7, 0xE4A7, 0xD1A7, 0xF1A7, 0x2000, 0xE4A7, 0xE0A7, 0xE9A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Point_Four_Dis, Point_Four_buf_ru, 32, true);
+
+    const uint16_t Point_Five_buf_ru[] = {0xB1A7, 0xF1A7, 0xE4A7, 0xD1A7, 0xF1A7, 0x0020, 0xE4A7, 0xE0A7, 0xE9A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Point_Five_Dis, Point_Five_buf_ru, 32, true);
+
+    const uint16_t Extrusion_buf_ru[] = {0xBFA7, 0xDCA7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE5A7, 0xD9A7, 0xDAA7, 0xF1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Extrusion_Dis, Extrusion_buf_ru, 32, true);
+
+    const uint16_t HeatBed_buf_ru[] = {0xAFA7, 0xD1A7, 0xD4A7, 0xE2A7, 0xD6A7, 0xD3A7, 0x2000, 0xE3A7, 0xE4A7, 0xE0A7, 0xDDA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_HeatBed_Dis, HeatBed_buf_ru, 32, true);
+
+    const uint16_t FactoryDefaults_buf_ru[] = {0xA9A7, 0xD1A7, 0xD3A7, 0xE0A7, 0xD5A7, 0xE3A7, 0xDCA7, 0xDAA7, 0xD6A7, 0x2000, 0xDFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_FactoryDefaults_Dis, FactoryDefaults_buf_ru, 32, true);
+
+    const uint16_t StoreSetting_buf_ru[] = {0xB3A7, 0xE0A7, 0xE7A7, 0xE2A7, 0xD1A7, 0xDFA7, 0xDAA7, 0xE4A7, 0xEEA7, 0x2000, 0xDFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_StoreSetting_Dis, StoreSetting_buf_ru, 32, true);
+
+    const uint16_t PrintPauseConfig_buf_ru[] = {0xAFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xD1A7, 0x2000, 0xE1A7, 0xD1A7, 0xE5A7, 0xD9A7, 0xEDA7, 0x2000, 0xE1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_PrintPauseConfig_Dis, PrintPauseConfig_buf_ru, 32, true);
+
+    const uint16_t X_Pluse_buf_ru[] = {0x5F58, 0x6C50, 0x7375, 0x0065, 0x2000};
+    dgusdisplay.WriteVariable(VP_X_Pluse_Dis, X_Pluse_buf_ru, 32, true);
+
+    const uint16_t Y_Pluse_buf_ru[] = {0x5F59, 0x6C50, 0x7375, 0x0065, 0x2000};
+    dgusdisplay.WriteVariable(VP_Y_Pluse_Dis, Y_Pluse_buf_ru, 32, true);
+
+    const uint16_t Z_Pluse_buf_ru[] = {0x5F5A, 0x6C50, 0x7375, 0x0065, 0x2000};
+    dgusdisplay.WriteVariable(VP_Z_Pluse_Dis, Z_Pluse_buf_ru, 32, true);
+
+    const uint16_t E0_Pluse_buf_ru[] = {0x3045, 0x505F, 0x756C, 0x6573, 0x2000};
+    dgusdisplay.WriteVariable(VP_E0_Pluse_Dis, E0_Pluse_buf_ru, 32, true);
+
+    const uint16_t E1_Pluse_buf_ru[] = {0x3145, 0x6C50, 0x7375, 0x0065, 0x2000};
+    dgusdisplay.WriteVariable(VP_E1_Pluse_Dis, E1_Pluse_buf_ru, 32, true);
+
+    const uint16_t X_Max_Speed_buf_ru[] = {0x5820, 0x2000, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_X_Max_Speed_Dis, X_Max_Speed_buf_ru, 32, true);
+
+    const uint16_t Y_Max_Speed_buf_ru[] = {0x2059,0xEED7,0XF3B4,0XD9CB,0XC8B6,0X2000};
+    dgusdisplay.WriteVariable(VP_Y_Max_Speed_Dis, Y_Max_Speed_buf_ru, 32, true);
+
+    const uint16_t Z_Max_Speed_buf_ru[] = {0x205A, 0x2032, 0xAEA7,0xD1A7,0xDCA7,0xE3A7,0xDAA7,0xDEA7,0xD1A7,0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2032, 0xE3A7,0xDCA7,0xE0A7,0xE2A7,0xE0A7,0xE3A7,0xE4A7,0xEEA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Z_Max_Speed_Dis, Z_Max_Speed_buf_ru, 32, true);
+
+    const uint16_t E0_Max_Speed_buf_ru[] = {0x3145, 0x2000, 0x2032, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2032, 0xE3A7,	 0xDCA7,	 0xE0A7,	 0xE2A7,	 0xE0A7,	 0xE3A7,	 0xE4A7,	 0xEEA7,	 0x2032, 0xE5A7,	 0xE3A7,	 0xDCA7,	 0xE2A7,	 0xE0A7,	 0xE2A7,	0X2000};
+    dgusdisplay.WriteVariable(VP_E0_Max_Speed_Dis, E0_Max_Speed_buf_ru, 32, true);
+
+    const uint16_t E1_Max_Speed_buf_ru[] = {0x3145, 0x2000, 0x2032, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2032, 0xE3A7,	 0xDCA7,	 0xE0A7,	 0xE2A7,	 0xE0A7,	 0xE3A7,	 0xE4A7,	 0xEEA7,	 0x2032, 0xE5A7,	 0xE3A7,	 0xDCA7,	 0xE2A7,	 0xE0A7,	 0xE2A7,	0X2000};
+    dgusdisplay.WriteVariable(VP_E1_Max_Speed_Dis, E1_Max_Speed_buf_ru, 32, true);
+
+    const uint16_t X_Max_Acc_Speed_buf_ru[] = {0x2058, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE5A7, 0xE3A7, 0xDCA7, 0xE2A7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_X_Max_Acc_Speed_Dis, X_Max_Acc_Speed_buf_ru, 32, true);
+
+    const uint16_t Y_Max_Acc_Speed_buf_ru[] = {0x2059, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE5A7, 0xE3A7, 0xDCA7, 0xE2A7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Y_Max_Acc_Speed_Dis, Y_Max_Acc_Speed_buf_ru, 32, true);
+
+    const uint16_t Z_Max_Acc_Speed_buf_ru[] = {0x2060, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE5A7, 0xE3A7, 0xDCA7, 0xE2A7, 0xE0A7, 0xE2A7, 0xD6A7, 0xDFA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Z_Max_Acc_Speed_Dis, Z_Max_Acc_Speed_buf_ru, 32, true);
+
+    const uint16_t E0_Max_Acc_Speed_buf_ru[] ={0x3045, 0x2000, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE5A7, 0xE3A7, 0xDCA7, 0xE2A7, 0xE0A7, 0xE2A7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_E0_Max_Acc_Speed_Dis, E0_Max_Acc_Speed_buf_ru, 32, true);
+
+    const uint16_t E1_Max_Acc_Speed_buf_ru[] = {0x3145, 0x2000, 0xAEA7, 0xD1A7, 0xDCA7, 0xE3A7, 0xDAA7, 0xDEA7, 0xD1A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xD1A7, 0xF1A7, 0x2000, 0xE3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE5A7, 0xE3A7, 0xDCA7, 0xE2A7, 0xE0A7, 0xE2A7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_E1_Max_Acc_Speed_Dis, E1_Max_Acc_Speed_buf_ru, 32, true);
+
+    const uint16_t X_PARK_POS_buf_ru[] = {0x2058, 0xB1A7, 0xE0A7, 0xD9A7, 0xDAA7, 0xE8A7, 0xDAA7, 0xF1A7, 0x2000, 0xE1A7, 0xD1A7, 0xE2A7, 0xDCA7, 0xE0A7, 0xD3A7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_X_PARK_POS_Dis, X_PARK_POS_buf_ru, 32, true);
+
+    const uint16_t Y_PARK_POS_buf_ru[] = {0x2059, 0xB1A7, 0xE0A7, 0xD9A7, 0xDAA7, 0xE8A7, 0xDAA7, 0xF1A7, 0x2000, 0xE1A7, 0xD1A7, 0xE2A7, 0xDCA7, 0xE0A7, 0xD3A7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Y_PARK_POS_Dis, Y_PARK_POS_buf_ru, 16, true);
+
+    const uint16_t Z_PARK_POS_buf_ru[] = {0X205A, 0xB1A7, 0xE0A7, 0xD9A7, 0xDAA7, 0xE8A7, 0xDAA7, 0xF1A7, 0x2000, 0xE1A7, 0xD1A7, 0xE2A7, 0xDCA7, 0xE0A7, 0xD3A7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Z_PARK_POS_Dis, Z_PARK_POS_buf_ru, 16, true);
+
+    const uint16_t Length_buf_ru[] = {0xA5A7, 0xDDA7, 0xDAA7, 0xDFA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Length_Dis, Length_buf_ru, 32, true);
+
+    const uint16_t Speed_buf_ru[] = {0xB3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Speed_Dis, Speed_buf_ru, 32, true);
+
+    const uint16_t InOut_buf_ru[] = {0xA3A7, 0xE7A7, 0xE0A7, 0xD5A7, 0x2F00, 0xA3A7, 0xEDA7, 0xE7A7, 0xE0A7, 0xD5A7,0X2000};
+    dgusdisplay.WriteVariable(VP_InOut_Dis, InOut_buf_ru, 32, true);
+
+    const uint16_t PrintTimet_buf_ru[] = {0xA3A7, 0xE2A7, 0xD6A7, 0xDEA7, 0xF1A7, 0x2000, 0xE1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_PrintTime_Dis, PrintTimet_buf_ru, 32, true);
+
+    const uint16_t E0_Temp_buf_ru[] = {0x3045, 0x2000, 0xB4A7, 0xD6A7, 0xDEA7, 0xE1A7, 0xD6A7, 0xE2A7, 0xD1A7, 0xE4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_E0_Temp_Dis, E0_Temp_buf_ru, 32, true);
+
+    const uint16_t E1_Temp_buf_ru[] = {0x3145, 0x2000, 0xB4A7, 0xD6A7, 0xDEA7, 0xE1A7, 0xD6A7, 0xE2A7, 0xD1A7, 0xE4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_E1_Temp_Dis, E1_Temp_buf_ru, 32, true);
+
+    const uint16_t HB_Temp_buf_ru[] = {0x4248, 0x2000, 0xB4A7, 0xD6A7, 0xDEA7, 0xE1A7, 0xD6A7, 0xE2A7, 0xD1A7, 0xE4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_HB_Temp_Dis, HB_Temp_buf_ru, 32, true);
+
+    const uint16_t Feedrate_buf_ru[] = {0xB3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE1A7, 0xE0A7, 0xD5A7, 0xD1A7, 0xE9A7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Feedrate_Dis, Feedrate_buf_ru, 32, true);
+
+    const uint16_t PrintAcc_buf_ru[] = {0xB3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_PrintAcc_Dis, PrintAcc_buf_ru, 32, true);
+
+    const uint16_t FAN_Speed_buf_ru[] = {0xB3A7, 0xDCA7, 0xE0A7, 0xE2A7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000, 0xE0A7, 0xD2A7, 0xD5A7, 0xE5A7, 0xD3A7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_FAN_Speed_Dis, FAN_Speed_buf_ru, 32, true);
+
+    const uint16_t Printing_buf_ru[] = {0xB1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xEEA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Printing_Dis, Printing_buf_ru, 32, true);
+
+    const uint16_t Info_EEPROM_1_buf_ru[] = {0xB3A7, 0xE0A7, 0xE7A7, 0xE2A7, 0xD1A7, 0xDFA7, 0xDAA7, 0xE4A7, 0xEEA7, 0x2000, 0xDFA7, 0xD1A7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE0A7, 0xDBA7, 0xDCA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Info_EEPROM_1_Dis, Info_EEPROM_1_buf_ru, 32, true);
+
+    const uint16_t Info_EEPROM_2_buf_ru[] = {0xA7B0, 0xA7E4, 0xA7DC, 0xA7D1, 0xA7E4, 0xA7DA, 0xA7E4, 0xA7EE, 0x0020, 0xA7DF, 0xA7D1, 0xA7E3, 0xA7E4, 0xA7E2, 0xA7E0, 0xA7DB, 0xA7DC, 0xA7DA, 0x2000};
+    dgusdisplay.WriteVariable(VP_Info_EEPROM_2_Dis, Info_EEPROM_2_buf_ru, 32, true);
+
+    const uint16_t TMC_X_Step_buf_ru[] = {0x2058, 0xB9A7, 0xE5A7, 0xD3A7, 0xE3A7, 0xE4A7, 0xD3A7, 0xDAA7, 0xE4A7, 0xD6A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_X_Step_Dis, TMC_X_Step_buf_ru, 32, true);
+
+    const uint16_t TMC_Y_Step_buf_ru[] = {0x2059, 0xB9A7, 0xE5A7, 0xD3A7, 0xE3A7, 0xE4A7, 0xD3A7, 0xDAA7, 0xE4A7, 0xD6A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Y_Step_Dis, TMC_Y_Step_buf_ru, 32, true);
+
+    const uint16_t TMC_Z_Step_buf_ru[] = {0x205A, 0xB9A7, 0xE5A7, 0xD3A7, 0xE3A7, 0xE4A7, 0xD3A7, 0xDAA7, 0xE4A7, 0xD6A7, 0xDDA7, 0xEEA7, 0xDFA7, 0xE0A7, 0xE3A7, 0xE4A7, 0xEEA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Z_Step_Dis, TMC_Z_Step_buf_ru, 32, true);
+
+    const uint16_t Info_PrinfFinsh_1_buf_ru[] = {0xA7B1, 0xA7D6, 0xA7E9, 0xA7D1, 0xA7E4, 0xA7EE, 0x0020, 0xA7D3, 0xA7ED, 0xA7E1, 0xA7E0, 0xA7DD, 0xA7DF, 0xA7D6, 0xA7DF, 0xA7D1, 0X2000};
+    dgusdisplay.WriteVariable(VP_Info_PrinfFinsh_1_Dis, Info_PrinfFinsh_1_buf_ru, 32, true);
+
+    const uint16_t TMC_X_Current_buf_ru[] = {0x2058, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_X_Current_Dis, TMC_X_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_Y_Current_buf_ru[] = {0X2059, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Y_Current_Dis, TMC_Y_Current_buf_ru, 32, true);
+ 
+    const uint16_t TMC_Z_Current_buf_ru[] = {0X205A, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Z_Current_Dis, TMC_Z_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_E0_Current_buf_ru[] = {0X3045, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_E0_Current_Dis, TMC_E0_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_X1_Current_buf_ru[] = {0X3158, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_X1_Current_Dis, TMC_X1_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_Y1_Current_buf_ru[] = {0X3159, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Y1_Current_Dis, TMC_Y1_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_Z1_Current_buf_ru[] = {0X315A, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_Z1_Current_Dis, TMC_Z1_Current_buf_ru, 32, true);
+
+    const uint16_t TMC_E1_Current_buf_ru[] = {0X3145, 0xB4A7, 0xE0A7, 0xDCA7, 0x2000};
+    dgusdisplay.WriteVariable(VP_TMC_E1_Current_Dis, TMC_E1_Current_buf_ru, 32, true);
+
+    const uint16_t Min_Ex_Temp_buf_ru[] = {0x696D, 0x206E, 0x2000, 0xE4A7, 0xD6A7, 0xDEA7, 0xE1A7, 0xD6A7, 0xE2A7, 0xD1A7, 0xE4A7, 0xE5A7, 0xE2A7, 0xD1A7, 0x2000, 0xEFA7, 0xDCA7, 0xE3A7, 0xE4A7, 0xE2A7, 0xE5A7, 0xD9A7, 0xDAA7, 0xDAA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Min_Ex_Temp_Dis, Min_Ex_Temp_buf_ru, 32, true);
+
+    const uint16_t AutoLEVEL_INFO1_buf_ru[] = {0xB1A7, 0xE0A7, 0xD8A7, 0xD1A7, 0xDDA7, 0xE5A7, 0xDBA7, 0xE3A7, 0xE4A7, 0xD1A7, 0x2000, 0xDFA7, 0xD1A7, 0xD8A7, 0xDEA7, 0xDAA7, 0xE4A7, 0xD6A7, 0x2000, 0xDCA7, 0xDFA7, 0xE0A7, 0xE1A7, 0xDCA7, 0xE5A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_AutoLEVEL_INFO1, AutoLEVEL_INFO1_buf_ru, 32, true);
+
+    const uint16_t EX_TEMP_INFO2_buf_ru[] = {0xB1A7, 0xE0A7, 0xD8A7, 0xD1A7, 0xDDA7, 0xE5A7, 0xDBA7, 0xE3A7, 0xE4A7, 0xD1A7, 0x2000, 0xE1A7, 0xE0A7, 0xD5A7, 0xE0A7, 0xD8A7, 0xD5A7, 0xDAA7, 0xE4A7, 0xD6A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_EX_TEMP_INFO2_Dis, EX_TEMP_INFO2_buf_ru, 32, true);
+
+    const uint16_t EX_TEMP_INFO3_buf_ru[] = {0xB0A7, 0xE4A7, 0xDEA7, 0xD6A7, 0xDFA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_EX_TEMP_INFO3_Dis, EX_TEMP_INFO3_buf_ru, 32, true);
+
+    const uint16_t PrintConfrim_Info_buf_ru[] = {0xAFA7, 0xD1A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xEEA7, 0x2000, 0xE1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xEEA7, 0x3F00, 0X2000};
+    dgusdisplay.WriteVariable(VP_PrintConfrim_Info_Dis, PrintConfrim_Info_buf_ru, 32, true);
+
+    const uint16_t StopPrintConfrim_Info_buf_ru[] = {0xB0A7, 0xE3A7,	0xE4A7,	0xD1A7,	0xDFA7,	0xE0A7,	0xD3A7,	0xDAA7,	0xE4A7,	0xEEA7,	0x2000,0xE1A7,	0xD6A7,	0xE9A7,	0xD1A7,	0xE4A7,	0xEEA7,	0x3F00, 0X2000};
+    dgusdisplay.WriteVariable(VP_StopPrintConfrim_Info_Dis, StopPrintConfrim_Info_buf_ru, 32, true);
+
+    const uint16_t Printting_buf_ru[] = {0xB1A7, 0xD6A7, 0xE9A7, 0xD1A7, 0xE4A7, 0xEEA7, 0X2000};
+    dgusdisplay.WriteVariable(VP_Printting_Dis, Printting_buf_ru, 32, true);
+
+    const uint16_t LCD_BLK_buf_ru[] = {0xB1A7, 0xE0A7, 0xD5A7, 0xE3A7, 0xD3A7, 0xD6A7, 0xE4A7, 0xDCA7, 0xD1A7, 0X2000};
+    dgusdisplay.WriteVariable(VP_LCD_BLK_Dis, LCD_BLK_buf_ru, 32, true);
   }
 }
 #endif
