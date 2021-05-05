@@ -315,6 +315,8 @@ extern DGUSScreenHandler ScreenHandler;
 
   #define MKS_SimpleChinese     0
   #define MKS_English           1
+  #define MKS_Russia            2
+  
   extern uint16_t DGUSLanguageSwitch;
   extern uint16_t DGUSAutoTurnOff;
 #endif

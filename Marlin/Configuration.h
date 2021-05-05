@@ -121,14 +121,14 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 115000
+#define BAUDRATE 115200
 
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2 
+#define MOTHERBOARD BOARD_MKS_ROBIN_NANO_V2
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -2265,7 +2265,7 @@
 //#define DGUS_LCD_UI_HIPRECY
 
 #define DGUS_LCD_UI_MKS
-// #define USE_MKS_GREEN_UI
+#define USE_MKS_GREEN_UI
 
 //
 // Touch-screen LCD for Malyan M200/M300 printers

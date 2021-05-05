@@ -300,6 +300,13 @@ constexpr uint16_t VP_LANGUAGE_CHANGE3              = 0X2386;
 constexpr uint16_t VP_LANGUAGE_CHANGE4              = 0X2388;
 constexpr uint16_t VP_LANGUAGE_CHANGE5              = 0X238A;
 
+constexpr uint16_t VP_LANGUAGE_CHANGE_F             = 0X2390;
+constexpr uint16_t VP_LANGUAGE_CHANGE1_F            = 0X2392;
+constexpr uint16_t VP_LANGUAGE_CHANGE2_F            = 0X2394;
+constexpr uint16_t VP_LANGUAGE_CHANGE3_F            = 0X2396;
+constexpr uint16_t VP_LANGUAGE_CHANGE4_F            = 0X2398;
+constexpr uint16_t VP_LANGUAGE_CHANGE5_F            = 0X239A;
+
 // LEVEL
 constexpr uint16_t VP_LEVEL_POINT                   = 0x2400;
 constexpr uint16_t VP_MESH_LEVEL_POINT              = 0x2410;
