@@ -28,9 +28,9 @@
 #else
 #define LOGO_TIME_DELAY       1500
 #endif
- //#define DGUS_MKS_RUNOUT_SENSOR
+//  #define DGUS_MKS_RUNOUT_SENSOR
 #if ENABLED(DGUS_MKS_RUNOUT_SENSOR)
- #define MT_DET_1_PIN P1_26
+//  #define MT_DET_1_PIN P1_26
 //#define MT_DET_2_PIN 2
     #define MT_DET_PIN_INVERTING false
 #endif
