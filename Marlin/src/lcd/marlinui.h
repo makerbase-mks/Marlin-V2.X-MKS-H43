@@ -25,6 +25,8 @@
 
 #include "../module/motion.h"
 
+#include "buttons.h"
+
 #if HAS_BUZZER
   #include "../libs/buzzer.h"
 #endif
@@ -37,40 +39,30 @@
   #include "tft_io/touch_calibration.h"
 #endif
 
-#if EITHER(HAS_LCD_MENU, ULTIPANEL_FEEDMULTIPLY)
+#if ANY(HAS_LCD_MENU, ULTIPANEL_FEEDMULTIPLY, SOFT_RESET_ON_KILL)
   #define HAS_ENCODER_ACTION 1
 #endif
-#if ((!HAS_ADC_BUTTONS && IS_NEWPANEL) || BUTTONS_EXIST(EN1, EN2)) && !IS_TFTGLCD_PANEL
-  #define HAS_ENCODER_WHEEL 1
-#endif
-#if HAS_ENCODER_WHEEL || ANY_BUTTON(ENC, BACK, UP, DWN, LFT, RT)
-  #define HAS_DIGITAL_BUTTONS 1
-#endif
-#if !HAS_ADC_BUTTONS && (IS_RRW_KEYPAD || (HAS_WIRED_LCD && !IS_NEWPANEL))
-  #define HAS_SHIFT_ENCODER 1
-#endif
 
-// I2C buttons must be read in the main thread
-#if ANY(LCD_I2C_VIKI, LCD_I2C_PANELOLU2, IS_TFTGLCD_PANEL)
-  #define HAS_SLOW_BUTTONS 1
+#if HAS_STATUS_MESSAGE
+  #define START_OF_UTF8_CHAR(C) (((C) & 0xC0u) != 0x80U)
 #endif
 
 #if E_MANUAL > 1
-  #define MULTI_MANUAL 1
+  #define MULTI_E_MANUAL 1
 #endif
 
 #if HAS_DISPLAY
   #include "../module/printcounter.h"
 #endif
 
+#if ENABLED(ADVANCED_PAUSE_FEATURE) && EITHER(HAS_LCD_MENU, EXTENSIBLE_UI)
+  #include "../feature/pause.h"
+  #include "../module/motion.h" // for active_extruder
+#endif
+
+#define START_OF_UTF8_CHAR(C) (((C) & 0xC0u) != 0x80U)
+
 #if HAS_WIRED_LCD
-
-  #include "../MarlinCore.h"
-
-  #if ENABLED(ADVANCED_PAUSE_FEATURE)
-    #include "../feature/pause.h"
-    #include "../module/motion.h" // for active_extruder
-  #endif
 
   enum LCDViewAction : uint8_t {
     LCDVIEW_NONE,
@@ -99,144 +91,9 @@
     typedef void (*screenFunc_t)();
     typedef void (*menuAction_t)();
 
-    #if ENABLED(ADVANCED_PAUSE_FEATURE)
-      void lcd_pause_show_message(const PauseMessage message,
-                                  const PauseMode mode=PAUSE_MODE_SAME,
-                                  const uint8_t extruder=active_extruder);
-    #endif
-
-    #if ENABLED(AUTO_BED_LEVELING_UBL)
-      void lcd_mesh_edit_setup(const float &initial);
-      float lcd_mesh_edit();
-    #endif
-
   #endif // HAS_LCD_MENU
 
 #endif // HAS_WIRED_LCD
-
-#if IS_RRW_KEYPAD
-  #define BTN_OFFSET          0 // Bit offset into buttons for shift register values
-
-  #define BLEN_KEYPAD_F3      0
-  #define BLEN_KEYPAD_F2      1
-  #define BLEN_KEYPAD_F1      2
-  #define BLEN_KEYPAD_DOWN    3
-  #define BLEN_KEYPAD_RIGHT   4
-  #define BLEN_KEYPAD_MIDDLE  5
-  #define BLEN_KEYPAD_UP      6
-  #define BLEN_KEYPAD_LEFT    7
-
-  #define EN_KEYPAD_F1      _BV(BTN_OFFSET + BLEN_KEYPAD_F1)
-  #define EN_KEYPAD_F2      _BV(BTN_OFFSET + BLEN_KEYPAD_F2)
-  #define EN_KEYPAD_F3      _BV(BTN_OFFSET + BLEN_KEYPAD_F3)
-  #define EN_KEYPAD_DOWN    _BV(BTN_OFFSET + BLEN_KEYPAD_DOWN)
-  #define EN_KEYPAD_RIGHT   _BV(BTN_OFFSET + BLEN_KEYPAD_RIGHT)
-  #define EN_KEYPAD_MIDDLE  _BV(BTN_OFFSET + BLEN_KEYPAD_MIDDLE)
-  #define EN_KEYPAD_UP      _BV(BTN_OFFSET + BLEN_KEYPAD_UP)
-  #define EN_KEYPAD_LEFT    _BV(BTN_OFFSET + BLEN_KEYPAD_LEFT)
-
-  #define RRK(B) (keypad_buttons & (B))
-
-  #ifdef EN_C
-    #define BUTTON_CLICK() ((buttons & EN_C) || RRK(EN_KEYPAD_MIDDLE))
-  #else
-    #define BUTTON_CLICK() RRK(EN_KEYPAD_MIDDLE)
-  #endif
-
-#endif // IS_RRW_KEYPAD
-
-#if HAS_DIGITAL_BUTTONS
-
-  // Wheel spin pins where BA is 00, 10, 11, 01 (1 bit always changes)
-  #define BLEN_A 0
-  #define BLEN_B 1
-
-  #define EN_A _BV(BLEN_A)
-  #define EN_B _BV(BLEN_B)
-
-  #define BUTTON_PRESSED(BN) !READ(BTN_## BN)
-
-  #if BUTTON_EXISTS(ENC) || HAS_TOUCH_BUTTONS
-    #define BLEN_C 2
-    #define EN_C _BV(BLEN_C)
-  #endif
-
-  #if ENABLED(LCD_I2C_VIKI)
-
-    #include <LiquidTWI2.h>
-
-    #define B_I2C_BTN_OFFSET 3 // (the first three bit positions reserved for EN_A, EN_B, EN_C)
-
-    // button and encoder bit positions within 'buttons'
-    #define B_LE (BUTTON_LEFT   << B_I2C_BTN_OFFSET)      // The remaining normalized buttons are all read via I2C
-    #define B_UP (BUTTON_UP     << B_I2C_BTN_OFFSET)
-    #define B_MI (BUTTON_SELECT << B_I2C_BTN_OFFSET)
-    #define B_DW (BUTTON_DOWN   << B_I2C_BTN_OFFSET)
-    #define B_RI (BUTTON_RIGHT  << B_I2C_BTN_OFFSET)
-
-    #if BUTTON_EXISTS(ENC)                                // The pause/stop/restart button is connected to BTN_ENC when used
-      #define B_ST (EN_C)                                 // Map the pause/stop/resume button into its normalized functional name
-      #define BUTTON_CLICK() (buttons & (B_MI|B_RI|B_ST)) // Pause/stop also acts as click until a proper pause/stop is implemented.
-    #else
-      #define BUTTON_CLICK() (buttons & (B_MI|B_RI))
-    #endif
-
-    // I2C buttons take too long to read inside an interrupt context and so we read them during lcd_update
-
-  #elif ENABLED(LCD_I2C_PANELOLU2)
-
-    #if !BUTTON_EXISTS(ENC) // Use I2C if not directly connected to a pin
-
-      #define B_I2C_BTN_OFFSET 3 // (the first three bit positions reserved for EN_A, EN_B, EN_C)
-
-      #define B_MI (PANELOLU2_ENCODER_C << B_I2C_BTN_OFFSET) // requires LiquidTWI2 library v1.2.3 or later
-
-      #define BUTTON_CLICK() (buttons & B_MI)
-
-    #endif
-
-  #endif
-
-#else
-
-  #undef BUTTON_EXISTS
-  #define BUTTON_EXISTS(...) false
-
-  // Shift register bits correspond to buttons:
-  #define BL_LE 7   // Left
-  #define BL_UP 6   // Up
-  #define BL_MI 5   // Middle
-  #define BL_DW 4   // Down
-  #define BL_RI 3   // Right
-  #define BL_ST 2   // Red Button
-  #define B_LE _BV(BL_LE)
-  #define B_UP _BV(BL_UP)
-  #define B_MI _BV(BL_MI)
-  #define B_DW _BV(BL_DW)
-  #define B_RI _BV(BL_RI)
-  #define B_ST _BV(BL_ST)
-
-  #ifndef BUTTON_CLICK
-    #define BUTTON_CLICK() (buttons & (B_MI|B_ST))
-  #endif
-
-#endif
-
-#if BUTTON_EXISTS(BACK) || EITHER(HAS_TOUCH_BUTTONS, IS_TFTGLCD_PANEL)
-  #define BLEN_D 3
-  #define EN_D _BV(BLEN_D)
-  #define LCD_BACK_CLICKED() (buttons & EN_D)
-#else
-  #define LCD_BACK_CLICKED() false
-#endif
-
-#ifndef BUTTON_CLICK
-  #ifdef EN_C
-    #define BUTTON_CLICK() (buttons & EN_C)
-  #else
-    #define BUTTON_CLICK() false
-  #endif
-#endif
 
 #if HAS_MARLINUI_U8GLIB
   enum MarlinFont : uint8_t {
@@ -254,9 +111,15 @@
 
 #if PREHEAT_COUNT
   typedef struct {
-    TERN_(HAS_HOTEND,     uint16_t hotend_temp);
-    TERN_(HAS_HEATED_BED, uint16_t bed_temp   );
-    TERN_(HAS_FAN,        uint16_t fan_speed  );
+    #if HAS_HOTEND
+      celsius_t hotend_temp;
+    #endif
+    #if HAS_HEATED_BED
+      celsius_t bed_temp;
+    #endif
+    #if HAS_FAN
+      uint16_t fan_speed;
+    #endif
   } preheat_t;
 #endif
 
@@ -266,16 +129,20 @@
   class ManualMove {
   private:
     static AxisEnum axis;
-    #if MULTI_MANUAL
+    #if MULTI_E_MANUAL
       static int8_t e_index;
     #else
       static int8_t constexpr e_index = 0;
     #endif
     static millis_t start_time;
-    TERN_(IS_KINEMATIC, static xyze_pos_t all_axes_destination);
+    #if IS_KINEMATIC
+      static xyze_pos_t all_axes_destination;
+    #endif
   public:
     static float menu_scale;
-    TERN_(IS_KINEMATIC, static float offset);
+    #if IS_KINEMATIC
+      static float offset;
+    #endif
     template <typename T>
     void set_destination(const T& dest) {
       #if IS_KINEMATIC
@@ -288,17 +155,34 @@
         current_position.set(dest);
       #endif
     }
+    float axis_value(const AxisEnum axis) {
+      return NATIVE_TO_LOGICAL(processing ? destination[axis] : SUM_TERN(IS_KINEMATIC, current_position[axis], offset), axis);
+    }
+    bool apply_diff(const AxisEnum axis, const_float_t diff, const_float_t min, const_float_t max) {
+      #if IS_KINEMATIC
+        float &valref = offset;
+        const float rmin = min - current_position[axis], rmax = max - current_position[axis];
+      #else
+        float &valref = current_position[axis];
+        const float rmin = min, rmax = max;
+      #endif
+      valref += diff;
+      const float pre = valref;
+      if (min != max) {
+        if (diff < 0)
+          NOLESS(valref, rmin);
+        else
+          NOMORE(valref, rmax);
+      }
+      return pre != valref;
+    }
     #if IS_KINEMATIC
       static bool processing;
     #else
       static bool constexpr processing = false;
     #endif
     static void task();
-    static void soon(AxisEnum axis
-      #if MULTI_MANUAL
-        , const int8_t eindex=-1
-      #endif
-    );
+    static void soon(const AxisEnum axis OPTARG(MULTI_E_MANUAL, const int8_t eindex=active_extruder));
   };
 
 #endif
@@ -313,6 +197,15 @@ public:
   MarlinUI() {
     TERN_(HAS_LCD_MENU, currentScreen = status_screen);
   }
+
+  #if HAS_MULTI_LANGUAGE
+    static uint8_t language;
+    static void set_language(const uint8_t lang);
+  #endif
+
+  #if HAS_MARLINUI_U8GLIB
+    static void update_language_font();
+  #endif
 
   #if ENABLED(SOUND_MENU_ITEM)
     static bool buzzer_enabled; // Initialized by settings.load()
@@ -344,6 +237,22 @@ public:
   #if ENABLED(SDSUPPORT)
     #define MEDIA_MENU_GATEWAY TERN(PASSWORD_ON_SD_PRINT_MENU, password.media_gatekeeper, menu_media)
     static void media_changed(const uint8_t old_stat, const uint8_t stat);
+  #endif
+
+  #if HAS_LCD_BRIGHTNESS
+    #ifndef MIN_LCD_BRIGHTNESS
+      #define MIN_LCD_BRIGHTNESS   1
+    #endif
+    #ifndef MAX_LCD_BRIGHTNESS
+      #define MAX_LCD_BRIGHTNESS 255
+    #endif
+    #ifndef DEFAULT_LCD_BRIGHTNESS
+      #define DEFAULT_LCD_BRIGHTNESS MAX_LCD_BRIGHTNESS
+    #endif
+    static uint8_t brightness;
+    static bool backlight;
+    static void set_brightness(const uint8_t value);
+    FORCE_INLINE static void refresh_brightness() { set_brightness(brightness); }
   #endif
 
   #if ENABLED(DWIN_CREALITY_LCD)
@@ -381,7 +290,7 @@ public:
         static inline uint32_t _calculated_remaining_time() {
           const duration_t elapsed = print_job_timer.duration();
           const progress_t progress = _get_progress();
-          return elapsed.value * (100 * (PROGRESS_SCALE) - progress) / progress;
+          return progress ? elapsed.value * (100 * (PROGRESS_SCALE) - progress) / progress : 0;
         }
         #if ENABLED(USE_M73_REMAINING_TIME)
           static uint32_t remaining_time;
@@ -403,6 +312,17 @@ public:
   #endif
 
   #if HAS_STATUS_MESSAGE
+
+    #if HAS_WIRED_LCD
+      #if ENABLED(STATUS_MESSAGE_SCROLLING)
+        #define MAX_MESSAGE_LENGTH _MAX(LONG_FILENAME_LENGTH, MAX_LANG_CHARSIZE * 2 * (LCD_WIDTH))
+      #else
+        #define MAX_MESSAGE_LENGTH (MAX_LANG_CHARSIZE * (LCD_WIDTH))
+      #endif
+    #else
+      #define MAX_MESSAGE_LENGTH 63
+    #endif
+
     static char status_message[];
     static uint8_t alert_level; // Higher levels block lower levels
 
@@ -414,7 +334,7 @@ public:
 
     static bool has_status();
     static void reset_status(const bool no_welcome=false);
-    static void set_status(const char* const message, const bool persist=false);
+    static void set_status(const char * const message, const bool persist=false);
     static void set_status_P(PGM_P const message, const int8_t level=0);
     static void status_printf_P(const uint8_t level, PGM_P const fmt, ...);
     static void set_alert_status_P(PGM_P const message);
@@ -422,7 +342,7 @@ public:
   #else
     static constexpr bool has_status() { return false; }
     static inline void reset_status(const bool=false) {}
-    static void set_status(const char* message, const bool=false);
+    static void set_status(const char *message, const bool=false);
     static void set_status_P(PGM_P message, const int8_t=0);
     static void status_printf_P(const uint8_t, PGM_P message, ...);
     static inline void set_alert_status_P(PGM_P const) {}
@@ -437,10 +357,10 @@ public:
     static void abort_print();
     static void pause_print();
     static void resume_print();
+    static void flow_fault();
 
-    #if ENABLED(DGUS_LCD_UI_MKS)
-    static void pause_print_move();
-    static void resume_print_move();
+    #if BOTH(PSU_CONTROL, PS_OFF_CONFIRM)
+      static void poweroff();
     #endif
 
     #if HAS_WIRED_LCD
@@ -463,6 +383,7 @@ public:
         static void draw_marlin_bootscreen(const bool line2=false);
         static void show_marlin_bootscreen();
         static void show_bootscreen();
+        static void bootscreen_completion(const millis_t sofar);
       #endif
 
       #if HAS_MARLINUI_U8GLIB
@@ -553,14 +474,19 @@ public:
     static PGM_P get_preheat_label(const uint8_t m);
   #endif
 
+  #if SCREENS_CAN_TIME_OUT
+    static inline void reset_status_timeout(const millis_t ms) { return_to_status_ms = ms + LCD_TIMEOUT_TO_STATUS; }
+  #else
+    static inline void reset_status_timeout(const millis_t) {}
+  #endif
+
   #if HAS_LCD_MENU
-    #if LCD_TIMEOUT_TO_STATUS
-      static millis_t return_to_status_ms;
-    #endif
 
     #if HAS_TOUCH_BUTTONS
       static uint8_t touch_buttons;
       static uint8_t repeat_delay;
+    #else
+      static constexpr uint8_t touch_buttons = 0;
     #endif
 
     #if ENABLED(ENCODER_RATE_MULTIPLIER)
@@ -580,15 +506,12 @@ public:
     static void set_selection(const bool sel) { selection = sel; }
     static bool update_selection();
 
-    static bool lcd_clicked;
-    static bool use_click();
-
     static void synchronize(PGM_P const msg=nullptr);
 
     static screenFunc_t currentScreen;
     static bool screen_changed;
     static void goto_screen(const screenFunc_t screen, const uint16_t encoder=0, const uint8_t top=0, const uint8_t items=0);
-    static void save_previous_screen();
+    static void push_current_screen();
 
     // goto_previous_screen and go_back may also be used as menu item callbacks
     static void _goto_previous_screen(TERN_(TURBO_BACK_MENU_ITEM, const bool is_back));
@@ -603,12 +526,12 @@ public:
       static void lcd_in_status(const bool inStatus);
     #endif
 
+    FORCE_INLINE static bool screen_is_sticky() {
+      return TERN1(SCREENS_CAN_TIME_OUT, defer_return_to_status);
+    }
+
     FORCE_INLINE static void defer_status_screen(const bool defer=true) {
-      #if LCD_TIMEOUT_TO_STATUS > 0
-        defer_return_to_status = defer;
-      #else
-        UNUSED(defer);
-      #endif
+      TERN(SCREENS_CAN_TIME_OUT, defer_return_to_status = defer, UNUSED(defer));
     }
 
     static inline void goto_previous_screen_no_defer() {
@@ -624,14 +547,40 @@ public:
       static void ubl_plot(const uint8_t x_plot, const uint8_t y_plot);
     #endif
 
+    #if ENABLED(AUTO_BED_LEVELING_UBL)
+      static void ubl_mesh_edit_start(const_float_t initial);
+      static float ubl_mesh_value();
+    #endif
+
     static void draw_select_screen_prompt(PGM_P const pref, const char * const string=nullptr, PGM_P const suff=nullptr);
 
-  #elif HAS_WIRED_LCD
+  #else
 
-    static constexpr bool lcd_clicked = false;
     static constexpr bool on_status_screen() { return true; }
-    FORCE_INLINE static void run_current_screen() { status_screen(); }
 
+    #if HAS_WIRED_LCD
+      FORCE_INLINE static void run_current_screen() { status_screen(); }
+    #endif
+
+  #endif
+
+  #if EITHER(HAS_LCD_MENU, EXTENSIBLE_UI)
+    static bool lcd_clicked;
+    static inline bool use_click() {
+      const bool click = lcd_clicked;
+      lcd_clicked = false;
+      return click;
+    }
+  #else
+    static constexpr bool lcd_clicked = false;
+    static inline bool use_click() { return false; }
+  #endif
+
+  #if ENABLED(ADVANCED_PAUSE_FEATURE) && EITHER(HAS_LCD_MENU, EXTENSIBLE_UI)
+    static void pause_show_message(const PauseMessage message, const PauseMode mode=PAUSE_MODE_SAME, const uint8_t extruder=active_extruder);
+  #else
+    static inline void _pause_show_message() {}
+    #define pause_show_message(...) _pause_show_message()
   #endif
 
   //
@@ -737,16 +686,18 @@ public:
 
 private:
 
+  #if SCREENS_CAN_TIME_OUT
+    static millis_t return_to_status_ms;
+    static bool defer_return_to_status;
+  #else
+    static constexpr bool defer_return_to_status = false;
+  #endif
+
   #if HAS_STATUS_MESSAGE
     static void finish_status(const bool persist);
   #endif
 
   #if HAS_WIRED_LCD
-    #if HAS_LCD_MENU && LCD_TIMEOUT_TO_STATUS > 0
-      static bool defer_return_to_status;
-    #else
-      static constexpr bool defer_return_to_status = false;
-    #endif
     static void draw_status_screen();
     #if HAS_GRAPHICAL_TFT
       static void tft_idle();

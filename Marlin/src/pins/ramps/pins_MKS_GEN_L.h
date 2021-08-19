@@ -51,9 +51,3 @@
 #endif
 
 #include "pins_RAMPS.h"
-
-#if ENABLED(DGUS_LCD_UI_MKS)
-  #ifndef SD_DETECT_PIN
-   #define SD_DETECT_PIN 49
- #endif
-#endif

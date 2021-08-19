@@ -81,16 +81,5 @@
 #ifndef E1_SERIAL_RX_PIN
   #define E1_SERIAL_RX_PIN                    12
 #endif
-//#define SUICIDE_PIN 21 //断电检测pin配置，根据实际用到的pin进行配置
-////#define SUICIDE_PIN_INVERTING false
-//#define KILL_PIN 19 //打完关机pin配置，根据实际用到的pin进行配置
-//#define KILL_PIN_STATE true
 
 #include "pins_RAMPS.h"
-
-#if ENABLED(DGUS_LCD_UI_MKS)
-  #ifndef SD_DETECT_PIN
-   #define SD_DETECT_PIN 49
- #endif
-#endif
-

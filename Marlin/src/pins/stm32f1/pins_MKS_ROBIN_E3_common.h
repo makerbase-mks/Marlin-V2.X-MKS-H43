@@ -25,9 +25,7 @@
  * MKS Robin E3 & E3D (STM32F103RCT6) common board pin assignments
  */
 
-#if NOT_TARGET(__STM32F1__)
-  #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
-#endif
+#include "env_validate.h"
 
 #define BOARD_NO_NATIVE_USB
 
@@ -49,7 +47,7 @@
 //
 // Servos
 //
-//#define SERVO0_PIN                          PA3
+#define SERVO0_PIN                          PA3
 
 //
 // Limit Switches
@@ -57,7 +55,7 @@
 #define X_STOP_PIN                          PA12
 #define Y_STOP_PIN                          PA11
 #define Z_MIN_PIN                           PC6
-//#define Z_MAX_PIN                           PB1
+#define Z_MAX_PIN                           PB1
 
 //
 // Steppers
@@ -126,7 +124,16 @@
 #define TEMP_BED_PIN                        PA1   // TB
 #define TEMP_0_PIN                          PA0   // TH1
 
-//#define FIL_RUNOUT_PIN                      PB10  // MT_DET
+#define FIL_RUNOUT_PIN                      PB10  // MT_DET
+
+//
+// Power Supply Control
+//
+#if ENABLED(MKS_PWC)
+  #define PS_ON_PIN                         PA14  // PW_OFF
+  #define KILL_PIN                          PB10  // PW_DET
+  #define KILL_PIN_STATE                    HIGH
+#endif
 
 /**
  *                _____                                      _____                                     _____
@@ -157,6 +164,19 @@
     #define DOGLCD_SCK                      PB13
     #define DOGLCD_MOSI                     PB15
 
+  #elif ENABLED(MKS_MINI_12864_V3)
+    #define DOGLCD_CS                       PA4
+    #define DOGLCD_A0                       PA5
+    #define LCD_PINS_DC                DOGLCD_A0
+    #define LCD_BACKLIGHT_PIN               -1
+    #define LCD_RESET_PIN                   PA6
+    #define NEOPIXEL_PIN                    PA7
+    #define DOGLCD_MOSI                     PB15
+    #define DOGLCD_SCK                      PB13
+    #define FORCE_SOFT_SPI
+    #define SOFTWARE_SPI
+	//#define LCD_SCREEN_ROT_180
+
   #else
 
     #define LCD_PINS_D4                     PA6
@@ -179,16 +199,19 @@
 // SD Card
 //
 #define SPI_DEVICE                             2
+#define ONBOARD_SPI_DEVICE                     2
+#define SDSS                           SD_SS_PIN
+#define SDCARD_CONNECTION                ONBOARD
 #define SD_DETECT_PIN                       PC10
+#define ONBOARD_SD_CS_PIN              SD_SS_PIN
+#define NO_SD_HOST_DRIVE
+
+// TODO: This is the only way to set SPI for SD on STM32 (for now)
+#define ENABLE_SPI2
 #define SD_SCK_PIN                          PB13
 #define SD_MISO_PIN                         PB14
 #define SD_MOSI_PIN                         PB15
 #define SD_SS_PIN                           PA15
-
-//#define SUICIDE_PIN PB10           // Enable MKSPWC SUICIDE PIN
-//#define SUICIDE_PIN_INVERTING false // Enable MKSPWC PIN STATE
-//#define KILL_PIN PB1              // Enable MKSPWC DET PIN
-//#define KILL_PIN_STATE true         // Enable MKSPWC PIN STATE
 
 #ifndef BOARD_ST7920_DELAY_1
   #define BOARD_ST7920_DELAY_1     DELAY_NS(125)
